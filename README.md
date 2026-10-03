@@ -3,6 +3,7 @@
 글로벌 GitHub Copilot Dev Days(9/1 ~ 10/31, 전 세계 오프라인 커뮤니티 이벤트)의 서울 행사 자료입니다.
 
 - **안내 페이지**: https://power-platform-users-korea.github.io/copilot-dev-days-seoul-2026/
+- **신청**: https://event-us.kr/m/136275/62279
 - **일시**: 2026. 10. 18 (일) 10:00 ~ 17:00
 - **모집**: 2026. 10. 1 (목) ~ 10. 16 (금), 선착순 100명
 - **준비물**: 개인 노트북 (대여 없음), 텀블러
