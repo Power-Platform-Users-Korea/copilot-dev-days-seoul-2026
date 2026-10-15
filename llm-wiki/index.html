@@ -10,6 +10,7 @@
 <meta property="og:image" content="https://power-platform-users-korea.github.io/copilot-dev-days-seoul-2026/banners/facebook-1200x630.png">
 <meta property="og:url" content="https://power-platform-users-korea.github.io/copilot-dev-days-seoul-2026/llm-wiki/">
 <meta name="twitter:card" content="summary_large_image">
+<link rel="license" href="LICENSE">
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/variable/pretendardvariable.min.css">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;600;800&display=swap" rel="stylesheet">
@@ -662,6 +663,13 @@ pre.code{margin:10px 0 0;padding:12px 14px;background:#0A0D13;border:1px solid v
 .kb-or{font-size:15px;color:var(--muted);margin:4px 0 10px}
 .tpl-link{display:block;margin-top:12px;font-family:var(--mono);font-size:14px;color:#C9B8FF}
 
+/* license */
+footer .lic{margin-top:16px;padding-top:14px;border-top:1px dashed var(--line);display:grid;gap:4px;line-height:1.7}
+footer .lic b{color:var(--muted);font-weight:700}
+footer .lic a{color:var(--green)}
+.lic-note{font-size:14px;color:var(--muted);margin:6px 0 0}
+.lic-note a{color:var(--green)}
+
 /* overlays */
 .ovl{position:fixed;inset:0;z-index:80;background:rgba(5,7,10,.88);display:none;align-items:center;justify-content:center;padding:24px}
 .ovl.on{display:flex}
@@ -1244,6 +1252,7 @@ SUMMARY error=0 warn=0 info=1 notes=10</pre>
         <a class="btn ghost" href="kit/README.md" target="_blank" rel="noopener">README</a>
       </div>
       <p class="muted" style="font-size:14px;margin:12px 0 0">브라우저로 zip을 받았다면 압축을 풀기 전에 <code>Unblock-File .\llm-wiki-kit.zip</code>을 실행하세요.</p>
+      <p class="lic-note">키트와 템플릿 저장소는 <a href="LICENSE" target="_blank" rel="noopener">GM-Social 라이선스 v2.0</a>을 따릅니다. 복사하거나 고쳐 쓸 때는 라이선스 파일과 저작권 표시를 남기고 출처를 밝혀 주세요.</p>
     </div>
 
     <div class="preset" id="recTabs" data-say="레시피가 두 개입니다. 오늘 오후에 바로 따라 할 수 있는 크기입니다." data-mood="happy"><button data-r="m365" class="on">M365로 만들기</button><button data-r="gh">깃허브로 만들기</button></div>
@@ -1450,6 +1459,11 @@ scripts/Test-LlmWiki.ps1을 실행해 결과를 알려 주세요.</pre></div></d
     GitHub Copilot Dev Days Seoul 2026 · Session 02 · 이인희 (파란두루미) ·
     <a href="../guide/">행사 안내 페이지</a> · <a href="https://llm-wiki-lecture.paranduru.me/" target="_blank" rel="noopener">LLM Wiki 실전 과정</a><br>
     화면 캡처는 2026-10-15에 회사 테넌트에서 실험한 기록이며, 개인정보가 보이는 부분은 흐리게 처리했습니다. 예시로 든 한결공장, 다온기계, 푸른금속은 가상의 회사입니다.
+  
+    <div class="lic">
+      <b>라이선스 · <a href="LICENSE" target="_blank" rel="noopener">GM-Social 라이선스 v2.0</a></b>
+      <span>이 페이지와 실습 키트(llm-wiki 폴더)의 저작권은 이인희 / 파란두루미(Parandurume Inc.)에 있습니다. 상업적 용도를 포함해 자유롭게 쓰고, 고치고, 나눌 수 있으며, 쓸 때는 출처를 밝혀 주세요. 파생 저작물을 배포하면 덧붙인 부분도 같은 라이선스로 공개해야 합니다. 운영 환경에 올리면 90일 안에 경기도 광명시에 감사하는 글과 광명을 소개하는 게시물을 올려 주세요. 교육·학습 목적이나 비영리 공익 목적으로 쓸 때는 이 의무가 면제됩니다. 화면 캡처에 나오는 Microsoft 제품 화면과 상표는 각 권리자의 것입니다.</span>
+    </div>
   </div>
 </footer>
 
