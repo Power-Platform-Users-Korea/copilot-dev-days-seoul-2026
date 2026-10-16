@@ -19,6 +19,7 @@
 | [`guide/`](guide/) | 안내 페이지(`index.html`)와 전체 캡처 이미지(`guide-page.png`) |
 | [`posters/`](posters/) | 영화 포스터 스타일 홍보 이미지 9장 (단체 2, 발표자 7), 1080×1350 |
 | [`banners/`](banners/) | SNS 배너 3장: Facebook 1200×630, LinkedIn 1200×1200, Instagram 1080×1350 |
+| [`llm-wiki/`](llm-wiki/) | 이인희 세션 강의 페이지. 스크롤을 따라 진행하는 LLM Wiki·온톨로지 탐험기이며, 발표 모드에서는 화살표 키로 장면을 넘기고 M으로 지도, T로 타이머를 엽니다. [`llm-wiki/kit/`](llm-wiki/kit/)에는 온톨로지와 위키 뼈대를 만들고 검사하고 깃허브·SharePoint에 올리는 PowerShell 키트가 있습니다 |
 
 ## 프로그램
 
