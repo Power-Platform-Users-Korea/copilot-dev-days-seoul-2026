@@ -3,6 +3,7 @@
 글로벌 GitHub Copilot Dev Days(9/1 ~ 10/31, 전 세계 오프라인 커뮤니티 이벤트)의 서울 행사 자료입니다.
 
 - **안내 페이지**: https://power-platform-users-korea.github.io/copilot-dev-days-seoul-2026/
+- **Power BI 에이전트 실습 매뉴얼**: https://power-platform-users-korea.github.io/copilot-dev-days-seoul-2026/powerbi-agent/
 - **신청**: https://event-us.kr/m/136275/62279
 - **일시**: 2026. 10. 18 (일) 10:00 ~ 17:00
 - **모집**: 2026. 10. 1 (목) ~ 10. 16 (금), 선착순 100명
@@ -19,9 +20,16 @@
 | [`guide/`](guide/) | 안내 페이지(`index.html`)와 전체 캡처 이미지(`guide-page.png`) |
 | [`posters/`](posters/) | 영화 포스터 스타일 홍보 이미지 9장 (단체 2, 발표자 7), 1080×1350 |
 | [`banners/`](banners/) | SNS 배너 3장: Facebook 1200×630, LinkedIn 1200×1200, Instagram 1080×1350 |
+| [`powerbi-agent/`](powerbi-agent/) | 허석 세션 참고 자료. Power BI 에이전트 한국어 실습 매뉴얼과 [`kit/`](powerbi-agent/kit/)의 교육용 가상 데이터 실습 패키지 |
 | [`llm-wiki/`](llm-wiki/) | 이인희 세션 강의 페이지. 스크롤을 따라 진행하는 LLM Wiki·온톨로지 탐험기이며, 발표 모드에서는 화살표 키로 장면을 넘기고 M으로 지도, T로 타이머를 엽니다. [`llm-wiki/kit/`](llm-wiki/kit/)에는 온톨로지와 위키 뼈대를 만들고 검사하고 깃허브·SharePoint에 올리는 PowerShell 키트가 있습니다 |
 
 ## 프로그램
+
+### Power BI 에이전트 실습 자료
+
+- [한국어 인터랙티브 매뉴얼](powerbi-agent/): 기존 디자인과 본문을 유지한 웹 매뉴얼입니다. 이후 수정은 `powerbi-agent/index.html`에 반영합니다.
+- [실습 패키지 ZIP](powerbi-agent/kit/K_Retail_PowerBI_Agent_실습패키지_통합본.zip): CSV 5종, 테마 JSON, 실습 가이드, 원본 HTML 매뉴얼이 포함되어 있습니다.
+- 고객·매출 데이터는 교육용 가상 데이터입니다. ZIP 내 HTML은 최초 제공본이며, 최신 매뉴얼은 웹페이지를 참고하세요.
 
 | 시간 | 세션 | 발표자 |
 | --- | --- | --- |

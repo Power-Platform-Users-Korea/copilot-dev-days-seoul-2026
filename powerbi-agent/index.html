@@ -1,0 +1,1374 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>PBI_AGENT_QUEST · 한결전자(K-Retail) Power BI AI 에이전트 완전 자동화 매뉴얼</title>
+  <meta name="description" content="GitHub Copilot Dev Days Seoul 2026 에이전틱 BI 세션 참고 자료. 한결전자(K-Retail) 가상 데이터로 따라 하는 Power BI 에이전트 한국어 실습 매뉴얼과 실습 패키지입니다.">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;600;700&family=Pretendard:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --bg: #070a12;
+      --bg-grid: rgba(242, 200, 17, 0.04);
+      --surface: #111726;
+      --surface-2: #182136;
+      --surface-3: #1f2b47;
+      --accent: #f2c811; /* Power BI Brand Yellow */
+      --accent-dim: rgba(242, 200, 17, 0.14);
+      --cyan: #38bdf8;
+      --cyan-dim: rgba(56, 189, 248, 0.14);
+      --emerald: #10b981;
+      --emerald-dim: rgba(16, 185, 129, 0.14);
+      --rose: #f43f5e;
+      --rose-dim: rgba(244, 63, 94, 0.14);
+      --purple: #a855f7;
+      --text: #f8fafc;
+      --text-sub: #cbd5e1;
+      --muted: #94a3b8;
+      --border: rgba(255, 255, 255, 0.09);
+      --border-strong: rgba(242, 200, 17, 0.35);
+      --shadow: 0 20px 50px rgba(0, 0, 0, 0.55);
+    }
+
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    html { scroll-behavior: smooth; }
+    body {
+      background-color: var(--bg);
+      background-image:
+        linear-gradient(to right, var(--bg-grid) 1px, transparent 1px),
+        linear-gradient(to bottom, var(--bg-grid) 1px, transparent 1px);
+      background-size: 40px 40px;
+      color: var(--text);
+      font-family: 'Pretendard', -apple-system, BlinkMacSystemFont, system-ui, sans-serif;
+      line-height: 1.65;
+      overflow-x: hidden;
+    }
+
+    code, pre, .mono {
+      font-family: 'JetBrains Mono', monospace;
+    }
+
+    /* Top Quest Header */
+    header {
+      position: fixed;
+      top: 0; left: 0; right: 0;
+      height: 64px;
+      background: rgba(7, 10, 18, 0.88);
+      backdrop-filter: blur(14px);
+      border-bottom: 1px solid var(--border);
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 0 1.75rem;
+      z-index: 1000;
+    }
+
+    .brand {
+      display: flex;
+      align-items: center;
+      gap: 0.6rem;
+      font-weight: 900;
+      font-size: 1.05rem;
+      letter-spacing: 0.04em;
+      color: var(--text);
+    }
+    .brand span { color: var(--accent); }
+    .brand-tag {
+      font-size: 0.72rem;
+      background: var(--accent-dim);
+      color: var(--accent);
+      border: 1px solid var(--border-strong);
+      padding: 0.15rem 0.5rem;
+      border-radius: 4px;
+      font-weight: 700;
+    }
+
+    .stage-indicator {
+      font-size: 0.9rem;
+      color: var(--text-sub);
+      font-weight: 600;
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+    }
+    .stage-indicator b { color: var(--accent); }
+
+    .level-hud {
+      display: flex;
+      align-items: center;
+      gap: 0.85rem;
+    }
+    .lv-pill {
+      background: var(--accent);
+      color: #000;
+      font-weight: 900;
+      font-size: 0.85rem;
+      padding: 0.2rem 0.65rem;
+      border-radius: 6px;
+      letter-spacing: 0.03em;
+    }
+    .exp-bar {
+      width: 140px;
+      height: 8px;
+      background: var(--surface-3);
+      border-radius: 99px;
+      overflow: hidden;
+      border: 1px solid rgba(255,255,255,0.08);
+    }
+    .exp-fill {
+      height: 100%;
+      width: 10%;
+      background: linear-gradient(90deg, var(--accent), var(--emerald));
+      transition: width 0.45s cubic-bezier(0.22, 1, 0.36, 1);
+    }
+    .lv-name {
+      font-size: 0.88rem;
+      font-weight: 700;
+      color: var(--cyan);
+      min-width: 135px;
+    }
+
+    /* Side Chapter Nav Dots */
+    .side-nav {
+      position: fixed;
+      right: 1.4rem;
+      top: 50%;
+      transform: translateY(-50%);
+      display: flex;
+      flex-direction: column;
+      gap: 0.6rem;
+      z-index: 900;
+    }
+    .nav-dot {
+      width: 10px;
+      height: 10px;
+      border-radius: 50%;
+      background: var(--surface-3);
+      border: 1px solid var(--muted);
+      cursor: pointer;
+      transition: all 0.25s;
+      position: relative;
+    }
+    .nav-dot.active {
+      background: var(--accent);
+      border-color: var(--accent);
+      transform: scale(1.35);
+      box-shadow: 0 0 10px var(--accent);
+    }
+    .nav-dot:hover::after {
+      content: attr(data-label);
+      position: absolute;
+      right: 20px;
+      top: 50%;
+      transform: translateY(-50%);
+      background: var(--surface-2);
+      color: var(--text);
+      padding: 0.25rem 0.6rem;
+      border-radius: 4px;
+      font-size: 0.75rem;
+      white-space: nowrap;
+      border: 1px solid var(--border);
+    }
+
+    /* Floating Agent Dialogue Bar */
+    .agent-bar {
+      position: fixed;
+      bottom: 1.2rem;
+      left: 50%;
+      transform: translateX(-50%);
+      width: min(880px, 92vw);
+      background: rgba(17, 23, 38, 0.94);
+      backdrop-filter: blur(12px);
+      border: 1px solid var(--border-strong);
+      border-radius: 14px;
+      padding: 0.85rem 1.25rem;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 1rem;
+      z-index: 950;
+      box-shadow: var(--shadow);
+    }
+    .agent-msg-wrap {
+      display: flex;
+      align-items: center;
+      gap: 0.85rem;
+      font-size: 0.92rem;
+    }
+    .agent-badge {
+      background: var(--cyan-dim);
+      color: var(--cyan);
+      border: 1px solid rgba(56, 189, 248, 0.35);
+      font-weight: 800;
+      font-size: 0.78rem;
+      padding: 0.2rem 0.55rem;
+      border-radius: 6px;
+      white-space: nowrap;
+    }
+    .agent-text {
+      color: var(--text-sub);
+    }
+    .hud-controls {
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+      white-space: nowrap;
+    }
+    .hud-btn {
+      background: var(--surface-2);
+      color: var(--text);
+      border: 1px solid var(--border);
+      padding: 0.35rem 0.7rem;
+      border-radius: 6px;
+      font-size: 0.8rem;
+      cursor: pointer;
+      font-weight: 600;
+      transition: all 0.2s;
+    }
+    .hud-btn:hover {
+      border-color: var(--accent);
+      color: var(--accent);
+    }
+
+    /* Item Toast Popup */
+    .item-toast {
+      position: fixed;
+      top: 80px;
+      right: 2rem;
+      background: var(--surface-2);
+      border: 2px solid var(--accent);
+      border-radius: 12px;
+      padding: 0.9rem 1.2rem;
+      box-shadow: var(--shadow);
+      z-index: 1100;
+      transform: translateX(130%);
+      transition: transform 0.4s cubic-bezier(0.22, 1, 0.36, 1);
+      max-width: 340px;
+    }
+    .item-toast.show {
+      transform: translateX(0);
+    }
+    .toast-head {
+      font-size: 0.72rem;
+      font-weight: 900;
+      color: var(--accent);
+      letter-spacing: 0.08em;
+      margin-bottom: 0.2rem;
+    }
+    .toast-body {
+      font-size: 0.88rem;
+      font-weight: 700;
+      color: var(--text);
+    }
+
+    /* Map Modal */
+    .map-modal {
+      position: fixed;
+      inset: 0;
+      background: rgba(7, 10, 18, 0.85);
+      backdrop-filter: blur(8px);
+      display: none;
+      align-items: center;
+      justify-content: center;
+      z-index: 2000;
+      padding: 1.5rem;
+    }
+    .map-modal.open { display: flex; }
+    .map-box {
+      background: var(--surface);
+      border: 1px solid var(--border-strong);
+      border-radius: 16px;
+      max-width: 720px;
+      width: 100%;
+      padding: 2rem;
+      box-shadow: var(--shadow);
+    }
+    .map-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+      gap: 0.75rem;
+      margin-top: 1.2rem;
+    }
+    .map-item {
+      background: var(--surface-2);
+      border: 1px solid var(--border);
+      padding: 0.85rem;
+      border-radius: 10px;
+      cursor: pointer;
+      transition: all 0.2s;
+    }
+    .map-item:hover {
+      border-color: var(--accent);
+      transform: translateY(-2px);
+    }
+    .map-item small { color: var(--accent); font-weight: 700; display: block; font-size: 0.75rem; }
+    .map-item b { font-size: 0.92rem; color: var(--text); }
+
+    /* Main Content Layout */
+    main {
+      max-width: 1040px;
+      margin: 0 auto;
+      padding: 80px 1.5rem 140px;
+    }
+
+    section {
+      min-height: 88vh;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      padding: 4.5rem 0;
+      border-bottom: 1px dashed rgba(255, 255, 255, 0.1);
+    }
+
+    .sec-meta {
+      display: flex;
+      align-items: center;
+      gap: 0.75rem;
+      margin-bottom: 0.75rem;
+      flex-wrap: wrap;
+    }
+    .chapter-badge {
+      background: var(--accent-dim);
+      color: var(--accent);
+      border: 1px solid var(--border-strong);
+      font-weight: 800;
+      font-size: 0.8rem;
+      padding: 0.2rem 0.65rem;
+      border-radius: 99px;
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+    }
+    .loc-badge {
+      font-size: 0.85rem;
+      color: var(--muted);
+    }
+    .loc-badge b { color: var(--text-sub); }
+
+    h1 {
+      font-size: clamp(2.2rem, 4.5vw, 3.3rem);
+      font-weight: 900;
+      line-height: 1.2;
+      margin-bottom: 1.2rem;
+      letter-spacing: -0.02em;
+    }
+    h1 span, h2 em {
+      color: var(--accent);
+      font-style: normal;
+    }
+    h2 {
+      font-size: clamp(1.75rem, 3.2vw, 2.4rem);
+      font-weight: 800;
+      line-height: 1.28;
+      margin-bottom: 1rem;
+      letter-spacing: -0.015em;
+    }
+    h3 {
+      font-size: 1.25rem;
+      font-weight: 700;
+      margin: 1.8rem 0 0.8rem;
+      color: var(--text);
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+    }
+    p.lead {
+      font-size: 1.1rem;
+      color: var(--text-sub);
+      margin-bottom: 1.5rem;
+      max-width: 880px;
+    }
+
+    /* Cards & Grids */
+    .grid-2 {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+      gap: 1.25rem;
+      margin: 1rem 0;
+    }
+    .grid-3 {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+      gap: 1.1rem;
+      margin: 1rem 0;
+    }
+    .grid-4 {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(210px, 1fr));
+      gap: 1rem;
+      margin: 1rem 0;
+    }
+
+    .card {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 14px;
+      padding: 1.4rem;
+      transition: border-color 0.25s, transform 0.25s;
+    }
+    .card:hover {
+      border-color: rgba(255, 255, 255, 0.22);
+    }
+    .card.highlight {
+      border-color: var(--border-strong);
+      background: linear-gradient(180deg, rgba(242, 200, 17, 0.06), var(--surface));
+    }
+    .card-tag {
+      display: inline-block;
+      font-size: 0.72rem;
+      font-weight: 800;
+      padding: 0.15rem 0.5rem;
+      border-radius: 4px;
+      margin-bottom: 0.6rem;
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+    }
+    .tag-yellow { background: var(--accent-dim); color: var(--accent); }
+    .tag-cyan { background: var(--cyan-dim); color: var(--cyan); }
+    .tag-emerald { background: var(--emerald-dim); color: var(--emerald); }
+    .tag-rose { background: var(--rose-dim); color: var(--rose); }
+
+    .card h4 {
+      font-size: 1.12rem;
+      margin-bottom: 0.55rem;
+      color: var(--text);
+    }
+    .card p, .card li {
+      font-size: 0.94rem;
+      color: var(--muted);
+    }
+    .card ul {
+      padding-left: 1.1rem;
+      margin-top: 0.5rem;
+    }
+    .card li { margin-bottom: 0.4rem; }
+    .card li strong { color: var(--text-sub); }
+
+    /* Formula / Callout Box */
+    .formula-box {
+      background: var(--surface-2);
+      border: 1px solid var(--border-strong);
+      border-radius: 14px;
+      padding: 1.4rem 1.75rem;
+      margin: 1.4rem 0;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      flex-wrap: wrap;
+      gap: 1rem;
+    }
+    .formula-title {
+      font-size: 0.8rem;
+      font-weight: 800;
+      color: var(--accent);
+      text-transform: uppercase;
+      letter-spacing: 0.06em;
+    }
+    .formula-eq {
+      font-size: 1.25rem;
+      font-weight: 800;
+      color: var(--text);
+    }
+    .formula-eq b { color: var(--accent); }
+    .formula-eq em { color: var(--cyan); font-style: normal; }
+
+    /* Tables */
+    .table-wrap {
+      overflow-x: auto;
+      margin: 1.2rem 0;
+      border-radius: 12px;
+      border: 1px solid var(--border);
+      background: var(--surface);
+    }
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      text-align: left;
+      font-size: 0.92rem;
+    }
+    th {
+      background: var(--surface-2);
+      color: var(--accent);
+      font-weight: 800;
+      padding: 0.9rem 1.1rem;
+      border-bottom: 1px solid var(--border);
+      white-space: nowrap;
+    }
+    td {
+      padding: 0.9rem 1.1rem;
+      border-bottom: 1px solid var(--border);
+      color: var(--text-sub);
+      vertical-align: top;
+    }
+    tr:last-child td { border-bottom: none; }
+    td code {
+      background: rgba(56, 189, 248, 0.12);
+      color: var(--cyan);
+      padding: 0.15rem 0.4rem;
+      border-radius: 4px;
+      font-size: 0.85em;
+    }
+
+    /* Code & Prompt Blocks */
+    .code-block {
+      position: relative;
+      background: #05070e;
+      border: 1px solid rgba(255, 255, 255, 0.12);
+      border-radius: 12px;
+      margin: 0.9rem 0;
+      overflow: hidden;
+    }
+    .code-header {
+      background: #0d1220;
+      padding: 0.5rem 1rem;
+      font-size: 0.78rem;
+      color: var(--muted);
+      border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+    .copy-btn {
+      background: var(--surface-2);
+      color: var(--text-sub);
+      border: 1px solid var(--border);
+      border-radius: 5px;
+      padding: 0.2rem 0.6rem;
+      font-size: 0.74rem;
+      cursor: pointer;
+    }
+    .copy-btn:hover { color: var(--accent); border-color: var(--accent); }
+    pre {
+      padding: 1.1rem;
+      overflow-x: auto;
+      font-size: 0.88rem;
+      color: #e2e8f0;
+      line-height: 1.6;
+    }
+
+    /* Item Reward Banner */
+    .item-reward {
+      margin-top: 2rem;
+      background: linear-gradient(90deg, rgba(242, 200, 17, 0.12), rgba(17, 23, 38, 0.9));
+      border: 1px solid var(--border-strong);
+      border-left: 5px solid var(--accent);
+      border-radius: 12px;
+      padding: 1.1rem 1.4rem;
+      display: flex;
+      align-items: center;
+      gap: 1.2rem;
+    }
+    .item-idx {
+      font-size: 1.6rem;
+      font-weight: 900;
+      color: var(--accent);
+      font-family: 'JetBrains Mono', monospace;
+    }
+    .item-reward b {
+      color: var(--text);
+      font-size: 1rem;
+      display: block;
+      margin-bottom: 0.15rem;
+    }
+    .item-reward span {
+      color: var(--text-sub);
+      font-size: 0.9rem;
+    }
+
+    /* Interactive Tabs for Rules (MUST/PREFER/AVOID) */
+    .rule-tabs {
+      display: flex;
+      gap: 0.6rem;
+      margin-bottom: 1rem;
+      flex-wrap: wrap;
+    }
+    .rule-tab {
+      background: var(--surface-2);
+      border: 1px solid var(--border);
+      color: var(--text-sub);
+      padding: 0.5rem 1rem;
+      border-radius: 8px;
+      cursor: pointer;
+      font-weight: 700;
+      font-size: 0.88rem;
+      transition: all 0.2s;
+    }
+    .rule-tab.active {
+      background: var(--accent);
+      color: #000;
+      border-color: var(--accent);
+    }
+    .rule-panel {
+      display: none;
+    }
+    .rule-panel.active {
+      display: block;
+    }
+
+    /* Stepper Flow */
+    .step-list {
+      display: flex;
+      flex-direction: column;
+      gap: 0.9rem;
+      margin: 1.2rem 0;
+    }
+    .step-item {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      padding: 1.1rem 1.3rem;
+      display: grid;
+      grid-template-columns: 110px 1fr;
+      gap: 1rem;
+      align-items: start;
+    }
+    .step-num {
+      background: var(--surface-2);
+      color: var(--accent);
+      border: 1px solid var(--border-strong);
+      font-weight: 800;
+      font-size: 0.8rem;
+      padding: 0.3rem 0.6rem;
+      border-radius: 6px;
+      text-align: center;
+      font-family: 'JetBrains Mono', monospace;
+    }
+
+    a.ext-link {
+      color: var(--cyan);
+      text-decoration: none;
+      border-bottom: 1px dashed rgba(56, 189, 248, 0.4);
+      transition: all 0.2s;
+    }
+    a.ext-link:hover {
+      color: var(--accent);
+      border-bottom-color: var(--accent);
+    }
+
+    @media (max-width: 768px) {
+      header { padding: 0 1rem; }
+      .stage-indicator { display: none; }
+      .lv-name { display: none; }
+      .side-nav { display: none; }
+      .step-item { grid-template-columns: 1fr; }
+      .agent-bar { flex-direction: column; align-items: flex-start; }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- Top Header -->
+  <header aria-label="진행 상황">
+    <div class="brand">
+      PBI_AGENT<span>_</span>QUEST
+      <span class="brand-tag">한결전자 K-Retail 실습판</span>
+    </div>
+    <div class="stage-indicator" id="hdr-stage">
+      현재 위치: <b>출발 전 · 오리엔테이션</b>
+    </div>
+    <div class="level-hud" title="BI 에이전트 마스터 레벨">
+      <span class="lv-pill">Lv.<span id="hdr-lv">1</span></span>
+      <div class="exp-bar"><div class="exp-fill" id="hdr-exp"></div></div>
+      <span class="lv-name" id="hdr-title">수동 드래그앤드롭러</span>
+    </div>
+  </header>
+
+  <!-- Right Side Navigation Dots -->
+  <nav class="side-nav" id="side-nav" aria-label="챕터 이동"></nav>
+
+  <!-- Item Toast Notification -->
+  <div class="item-toast" id="item-toast" role="status" aria-live="polite">
+    <div class="toast-head">ITEM ACQUIRED</div>
+    <div class="toast-body" id="toast-text">아이템 획득!</div>
+  </div>
+
+  <!-- Map Modal (M key) -->
+  <div class="map-modal" id="map-modal" role="dialog" aria-modal="true" aria-label="전체 챕터 지도">
+    <div class="map-box">
+      <div style="display:flex; justify-content:space-between; align-items:center;">
+        <h3 style="margin:0;">퀘스트 전체 지도 (Chapter Map)</h3>
+        <button class="hud-btn" onclick="toggleMap()">닫기 (ESC)</button>
+      </div>
+      <p style="color:var(--muted); font-size:0.9rem; margin-top:0.4rem;">원하는 챕터를 클릭하면 즉시 이동합니다.</p>
+      <div class="map-grid" id="map-grid"></div>
+    </div>
+  </div>
+
+  <!-- Bottom Floating Agent Bar -->
+  <div class="agent-bar">
+    <div class="agent-msg-wrap">
+      <span class="agent-badge">PBI 에이전트 · Claude</span>
+      <span class="agent-text" id="agent-speech">안녕하세요! 한결전자(K-Retail) 한글 실습 데이터셋으로 Power BI 완전 자동화 여정을 시작해 보세요.</span>
+    </div>
+    <div class="hud-controls">
+      <button class="hud-btn" onclick="moveSection(-1)" title="이전 장 (←)">← 이전</button>
+      <button class="hud-btn" onclick="moveSection(1)" title="다음 장 (→)">다음 →</button>
+      <button class="hud-btn" onclick="toggleMap()" title="지도 열기 (M)">지도 (M)</button>
+    </div>
+  </div>
+
+  <main>
+
+    <!-- SECTION 0: HERO / OVERTURE -->
+    <section id="sec-0" data-lv="1" data-title="수동 드래그앤드롭러" data-stage="Overture · 패러다임의 전환" data-agent="과거의 AI 연동과 2026년 6월 MS 공식 Authoring Agent Skills의 결정적 차이를 먼저 살펴봅시다." data-item="">
+      <div class="sec-meta">
+        <span class="chapter-badge">Overture · 한국어 실습 매뉴얼</span>
+        <span class="loc-badge">실습 도메인: <b>한결전자 (K-Retail 가전·디지털 유통 데이터셋)</b></span>
+      </div>
+      <h1>드래그 앤 드롭 없이 완성하는<br><span>Power BI 에이전트</span> 한국어 실습 매뉴얼<span>_</span></h1>
+      <p>
+        <a class="ext-link" href="../guide/">← 행사 안내</a>
+        · <a class="ext-link" href="kit/K_Retail_PowerBI_Agent_실습패키지_통합본.zip" download>실습 패키지 ZIP 다운로드</a>
+      </p>
+      <p style="color:var(--muted); margin-top:0.6rem;">
+        실습 패키지의 고객·매출 데이터는 교육용 가상 데이터입니다. ZIP에는 CSV 5종, 테마 JSON, 실습 가이드와 원본 HTML 매뉴얼이 포함되어 있습니다. 최신 매뉴얼은 이 웹페이지를 참고하세요.
+      </p>
+      <p class="lead">
+        단 한 개의 시각적 개체(Visual)도 직접 마우스로 만들지 않고, 제공된 <b>한결전자(K-Retail) 5종 한글 CSV 데이터셋</b>과 <b>Claude AI</b>, Microsoft 공식 <b>Authoring Agent Skills</b>, <b>MCP 서버</b>, 그리고 <b>Desktop Bridge CLI</b>만으로 15분 만에 4페이지 분량의 한국어 경영진 대시보드를 설계·구축·시각 검증하는 실전 가이드입니다.
+      </p>
+
+      <div class="grid-2">
+        <div class="card">
+          <span class="card-tag tag-rose">과거 방식 (Without Authoring Skills)</span>
+          <h4>단순 프롬프트 + 기본 MCP만 사용했을 때</h4>
+          <ul>
+            <li><strong>기능 한계</strong>: DAX 측정값 생성과 1페이지짜리 기본 차트 4~5개 배치에만 그침</li>
+            <li><strong>디자인 부재</strong>: 한글 폰트(맑은 고딕/Pretendard) 최적화, 여백, 색상 조화, 시각적 계층 구조가 없는 투박한 결과물</li>
+            <li><strong>검증 불가 (맹목적 생성)</strong>: 에이전트가 JSON 파일만 뱉어낼 뿐, 실제 화면에서 한글 레이블이 잘렸는지 차트가 깨졌는지 스스로 확인하지 못함</li>
+          </ul>
+        </div>
+        <div class="card highlight">
+          <span class="card-tag tag-yellow">신규 방식 (June 2026 MS Authoring Skills)</span>
+          <h4>공식 Agent Skills + 2종 CLI + Desktop Bridge 결합</h4>
+          <ul>
+            <li><strong>End-to-End 워크플로우</strong>: 요구사항 기획(Planner) → 디자인 아키타입(Design) → PBIR 코드 생성(Authoring) → 배포(Management)</li>
+            <li><strong>자체 시각 검수 루프 (Self-Correction)</strong>: 에이전트가 직접 Power BI Desktop을 새로고침(Reload)하고 스크린샷을 찍어 눈으로 보고 깨진 UI를 스스로 고침</li>
+            <li><strong>기업 표준 일관성</strong>: 한국형 브랜드 테마(<code>Retail_IQ_Light_KR.json</code>)와 모던 비주얼/네비게이션 바를 완벽 적용</li>
+          </ul>
+        </div>
+      </div>
+
+      <div class="formula-box">
+        <div>
+          <div class="formula-title">CORE ARCHITECTURE FORMULA</div>
+          <div class="formula-eq">완전 자동화 BI = <b>K_Retail_Sales_Demo.pbip</b> × <em>Authoring MCP (모델)</em> × <b>2종 CLI &amp; Skills (화면·자체검수)</b></div>
+        </div>
+        <div style="font-size:0.85rem; color:var(--muted);">
+          단축키 안내: <kbd>→</kbd> <kbd>←</kbd> 장 이동 · <kbd>M</kbd> 전체 지도
+        </div>
+      </div>
+    </section>
+
+    <!-- SECTION 1: TECH STACK ARCHITECTURE -->
+    <section id="sec-1" data-lv="2" data-title="아키텍처 탐색가" data-stage="Chapter 01 · 5계층 기술 스택" data-agent="전체 시스템은 파일 포맷, 에이전트 런타임, MCP, CLI, 그리고 Skill 플러그인의 5계층으로 맞물려 돌아갑니다." data-item="01. 5계층 기술 스택 청사진 획득!">
+      <div class="sec-meta">
+        <span class="chapter-badge">Chapter 01 · Tech Stack</span>
+        <span class="loc-badge">현재 위치: <b>시스템 설계소</b></span>
+      </div>
+      <h2>전체 워크플로우를 지탱하는 <em>5계층 기술 스택</em></h2>
+      <p class="lead">
+        에이전트가 한글 데이터를 이해하고(Semantic Model), 화면을 그리고(PBIR Report), 눈으로 확인(Desktop Bridge)하기 위해 필요한 전체 구성 요소입니다.
+      </p>
+
+      <div class="table-wrap">
+        <table>
+          <thead>
+            <tr>
+              <th>계층 (Layer)</th>
+              <th>핵심 구성 요소</th>
+              <th>역할 및 기술적 상세 설명</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td><b>1. 프로젝트 파일 계층</b></td>
+              <td><code>PBIP</code> / <code>PBIR</code> / <code>TMDL</code></td>
+              <td>
+                • <b>PBIP (Power BI Project)</b>: 단일 바이너리(<code>.pbix</code>)는 외부 AI가 수정할 수 없으므로 반드시 폴더 기반 프로젝트 포맷인 <code>K_Retail_Sales_Demo.pbip</code>로 변환해야 합니다.<br>
+                • <b>TMDL</b>: 시맨틱 모델(테이블, 한글 컬럼, 1:N 관계, DAX 측정값)을 정의하는 텍스트 언어입니다.<br>
+                • <b>PBIR</b>: 리포트 페이지, 비주얼 좌표/바인딩, 필터, 테마(<code>report.json</code>)를 담는 JSON 포맷입니다.
+              </td>
+            </tr>
+            <tr>
+              <td><b>2. 에이전트 런타임</b></td>
+              <td><code>Claude Code</code> / <code>Copilot CLI</code></td>
+              <td>
+                • 로컬 파일 시스템을 읽고 쓰며, 터미널 명령어(CLI)와 MCP 도구를 호출하는 멀티모달 LLM 호스트입니다.<br>
+                • 영상에서는 <b>Claude Code</b>에서 <code>Bypass Permissions</code> 모드를 켜서 사람의 개입 없이 루프를 돌렸으며, VS Code 기반 <b>GitHub Copilot</b>에서도 동일하게 동작합니다.
+              </td>
+            </tr>
+            <tr>
+              <td><b>3. 시맨틱 모델 제어</b></td>
+              <td><code>Power BI Authoring MCP</code></td>
+              <td>
+                • 구 명칭: <i>Power BI Modeling MCP Server</i>.<br>
+                • 실행 중인 Power BI Desktop의 로컬 Analysis Services(XMLA) 인스턴스에 연결하여 스키마를 프로파일링하고, 라이브 DAX 쿼리를 실행하며, 한글 KPI 측정값을 생성/검증합니다.
+              </td>
+            </tr>
+            <tr>
+              <td><b>4. 리포트 생성 &amp; 브릿지</b></td>
+              <td><code>powerbi-report-author</code><br><code>powerbi-desktop</code></td>
+              <td>
+                • <b>Report Authoring CLI</b>: PBIR JSON 스키마 생성, 최신 비주얼 메타데이터 조회 및 구문 검증(<code>validate</code>)을 수행합니다.<br>
+                • <b>Desktop Bridge CLI</b>: 실행 중인 Power BI Desktop 화면을 즉시 새로고침(<code>reload</code>)하고 페이지별 PNG 스크린샷(<code>screenshot</code>)을 캡처합니다.
+              </td>
+            </tr>
+            <tr>
+              <td><b>5. 지능형 작업 지침서</b></td>
+              <td><code>microsoft/skills-for-fabric</code></td>
+              <td>
+                • Microsoft가 공식 배포하는 에이전트 플러그인 모음(<code>powerbi-authoring</code>)입니다.<br>
+                • 기획(<code>planning</code>), 디자인(<code>design</code>), 구현(<code>authoring</code>), 배포(<code>management</code>) 4대 스킬이 에이전트의 행동 규칙(MUST/PREFER/AVOID)을 통제합니다.
+              </td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+
+      <div class="item-reward">
+        <div class="item-idx">01</div>
+        <div>
+          <b>아이템 획득: 5계층 아키텍처 청사진</b>
+          <span>데이터 영역은 MCP와 TMDL이, 화면 영역은 2종의 CLI와 PBIR JSON이 담당한다는 명확한 경계를 파악했습니다.</span>
+        </div>
+      </div>
+    </section>
+
+    <!-- SECTION 2: PBIP & KOREAN DATA MODEL ANATOMY -->
+    <section id="sec-2" data-lv="3" data-title="PBIP 구조 설계자" data-stage="Chapter 02 · 한결전자 데이터셋 & PBIP 해부" data-agent="제공해 드린 K_Retail_PowerBI_Agent_실습패키지.zip 안의 5개 한글 CSV를 불러와 K_Retail_Sales_Demo.pbip 로 저장하세요!" data-item="02. 한결전자 K-Retail 스타 스키마 획득!">
+      <div class="sec-meta">
+        <span class="chapter-badge">Chapter 02 · K-Retail Dataset &amp; PBIP</span>
+        <span class="loc-badge">현재 위치: <b>프로젝트 폴더 보관소</b></span>
+      </div>
+      <h2>실습 데이터셋(<code>K-Retail</code>)과 <em><code>.pbip</code> 폴더 해부도</em></h2>
+      <p class="lead">
+        실습 패키지(<code>K_Retail_PowerBI_Agent_실습패키지.zip</code>)에 포함된 5개의 한글 CSV 파일을 Power BI Desktop에 로드한 뒤, <b>파일 &gt; 다른 이름으로 저장 &gt; Power BI project files (*.pbip)</b>로 저장하면 아래 우측과 같은 코드 구조가 생성됩니다.
+      </p>
+
+      <div class="grid-2">
+        <div class="card">
+          <span class="card-tag tag-cyan">한결전자 데이터 모델 (Star Schema · 5종 CSV)</span>
+          <h4>1개의 Fact 테이블 + 4개의 Dimension 테이블</h4>
+          <ul>
+            <li><strong>Fact_Sales.csv (매출 팩트 · 2,356건)</strong>: <code>주문번호</code>, <code>주문항목번호</code>, <code>주문일자</code>, <code>배송완료일자</code>, <code>CustomerKey</code>, <code>StoreKey</code>, <code>ProductKey</code>, <code>주문수량</code>, <code>통화코드(KRW)</code><br>
+            <span style="color:var(--accent); font-weight:700;">★ 핵심 설계 포인트</span>: <code>주문수량</code>만 있고 단가 컬럼이 없습니다! 에이전트가 MCP를 통해 스스로 <code>Dim_Products</code>를 스캔하여 단가를 찾아내도록 설계되었습니다.</li>
+            <li><strong>Dim_Products.csv (제품 차원 · 18종)</strong>: 갤럭시 북4 프로, 그램 프로, 올레드 에보 TV, 비스포크 AI 콤보 등 한글 <code>제품명</code>, <code>카테고리</code>, <code>브랜드</code>(삼성/LG/쿠쿠), <code>원가_KRW</code>, <code>판매단가_KRW</code></li>
+            <li><strong>Dim_Stores.csv (매장 차원 · 12곳)</strong>: 강남 본점, 여의도 더현대점, 판교 테크노밸리점, 공식 온라인몰 등 <code>매장명</code>, <code>권역</code>(서울/수도권/영남권/온라인 등), <code>매장유형</code>, <code>매장면적_제곱미터</code></li>
+            <li><strong>Dim_Customers.csv (고객 차원 · 200명)</strong>: <code>고객명</code>, <code>성별</code>, <code>연령대</code>, <code>거주권역</code>, <code>고객등급</code>(VIP/골드/실버/일반)</li>
+            <li><strong>Dim_Date.csv (날짜 차원 · 2024~2026)</strong>: <code>Date</code>, <code>연도</code>, <code>분기</code>, <code>월</code>, <code>연월</code>, <code>평일주말구분</code></li>
+          </ul>
+        </div>
+
+        <div class="card">
+          <span class="card-tag tag-yellow">디스크 폴더 해부도 (Anatomy of PBIP)</span>
+          <h4><code>K_Retail_Sales_Demo.pbip</code> 저장 시 생성 구조</h4>
+          <div class="code-block" style="margin-top:0.4rem;">
+            <pre style="padding:0.85rem; font-size:0.82rem;">K_Retail_Practice/
+├── Fact_Sales.csv 외 4개 CSV          # 원본 한글 실습 데이터
+├── Retail_IQ_Light_KR.json            # 한국형 커스텀 테마 JSON
+├── K_Retail_Sales_Demo.pbip           # 프로젝트 진입점 파일
+├── K_Retail_Sales_Demo.SemanticModel/ # [MCP 담당 영역]
+│   └── definition/
+│       ├── tables/                    # Fact_Sales.tmdl, Dim_Products.tmdl 등
+│       ├── relationships.tmdl         # 4개 1:N 관계 배선 정의
+│       └── model.tmdl
+└── K_Retail_Sales_Demo.Report/        # [CLI &amp; Authoring Skill 담당 영역]
+    ├── StaticResources/
+    │   └── SharedResources/BaseThemes/ # Retail_IQ_Light_KR.json 복사 위치
+    └── definition/
+        ├── report.json                # 리포트 전역 설정 및 테마 등록
+        └── pages/                     # 4개 한글 페이지 및 Visual JSON</pre>
+          </div>
+          <p style="font-size:0.86rem; color:var(--text-sub); margin-top:0.6rem;">
+            <b>필수 1:N 관계 연결 확인 (모델 보기 탭)</b>:<br>
+            • <code>Dim_Products[ProductKey]</code> → <code>Fact_Sales[ProductKey]</code><br>
+            • <code>Dim_Stores[StoreKey]</code> → <code>Fact_Sales[StoreKey]</code><br>
+            • <code>Dim_Customers[CustomerKey]</code> → <code>Fact_Sales[CustomerKey]</code><br>
+            • <code>Dim_Date[Date]</code> → <code>Fact_Sales[주문일자]</code>
+          </p>
+        </div>
+      </div>
+
+      <div class="item-reward">
+        <div class="item-idx">02</div>
+        <div>
+          <b>아이템 획득: 한결전자 K-Retail 스타 스키마 &amp; PBIP 프로젝트</b>
+          <span>한글 깨짐 없는 UTF-8-SIG 데이터셋과 코드 기반 PBIP 폴더 구조가 준비되었습니다.</span>
+        </div>
+      </div>
+    </section>
+
+    <!-- SECTION 3: DEEP DIVE INTO MCP & 2 CLIs -->
+    <section id="sec-3" data-lv="4" data-title="MCP & CLI 조종사" data-stage="Chapter 03 · MCP와 2종의 공식 CLI" data-agent="한결전자 데이터셋에서 MCP가 어떻게 RELATED() DAX 수식을 스스로 추론해 내는지 확인해 보세요!" data-item="03. 듀얼 CLI & MCP 컨트롤러 획득!">
+      <div class="sec-meta">
+        <span class="chapter-badge">Chapter 03 · Deep Dive: MCP &amp; CLIs</span>
+        <span class="loc-badge">현재 위치: <b>엔진 제어실</b></span>
+      </div>
+      <h2><em>MCP 서버</em>와 <em>2종의 공식 CLI</em>는 실습에서 어떻게 작동하는가?</h2>
+      <p class="lead">
+        한결전자 실습 데이터를 처리할 때 에이전트가 백그라운드에서 실행하는 3가지 핵심 엔진의 실제 동작입니다.
+      </p>
+
+      <div class="grid-3">
+        <!-- Tool 1: MCP -->
+        <div class="card highlight">
+          <span class="card-tag tag-cyan">1. 시맨틱 모델 엔진</span>
+          <h4>Power BI Authoring MCP</h4>
+          <p style="margin-bottom:0.6rem;">실행 중인 <code>K_Retail_Sales_Demo</code> 인메모리 모델과 직접 통신합니다.</p>
+          <ul>
+            <li><strong>인스턴스 탐색 및 연결</strong>: 로컬에서 열려 있는 Power BI Desktop 프로세스를 찾아 연결합니다.</li>
+            <li><strong>한글 스키마 추론</strong>: <code>Fact_Sales</code>에 <code>주문수량</code>만 있고 단가가 없음을 발견한 뒤, 스스로 <code>Dim_Products</code>를 읽어 <code>판매단가_KRW</code>와 <code>원가_KRW</code>를 찾아냅니다.</li>
+            <li><strong>탐색용 DAX 쿼리 실행</strong>: 2024년~2026년 상반기까지의 날짜 범위와 원화(KRW) 매출 규모(억/천만 원 단위)를 먼저 조회합니다.</li>
+            <li><strong>한글 DAX 측정값 생성 및 검증</strong>: <code>총매출액 = SUMX(Fact_Sales, Fact_Sales[주문수량] * RELATED(Dim_Products[판매단가_KRW]))</code> 등 10여 개 측정값을 <code>KPI 측정값</code> 폴더에 생성하고 검증합니다.</li>
+          </ul>
+        </div>
+
+        <!-- Tool 2: Report Author CLI -->
+        <div class="card highlight">
+          <span class="card-tag tag-yellow">2. PBIR 리포트 작성/검증 CLI</span>
+          <h4><code>powerbi-report-author</code></h4>
+          <p style="margin-bottom:0.6rem;">패키지명: <code>@microsoft/powerbi-report-authoring-cli</code></p>
+          <ul>
+            <li><strong>모던 비주얼 규격 조회</strong>: 최신 비주얼 타입과 상단 페이지 이동 바인 <code>pageNavigator</code>(v2.1.0)의 정확한 데이터 역할(Role) 바인딩 구조를 조회합니다.</li>
+            <li><strong>PBIR JSON 스키마 검증 (<code>validate</code>)</strong>: 에이전트가 생성한 4개 한글 페이지(경영진 종합 요약, 제품 및 브랜드 분석, 권역 및 매장 분석, 고객 세그먼트 비교)의 JSON 파일 무결성을 검사합니다.</li>
+            <li><strong>에러 피드백 루프</strong>: JSON 스키마 에러나 테마 선행 오류가 있으면 즉시 라인 위치를 반환하여 에이전트가 스스로 수정하게 만듭니다.</li>
+          </ul>
+        </div>
+
+        <!-- Tool 3: Desktop Bridge CLI -->
+        <div class="card highlight">
+          <span class="card-tag tag-emerald">3. 실시간 화면 제어/캡처 CLI</span>
+          <h4><code>powerbi-desktop</code> (Desktop Bridge)</h4>
+          <p style="margin-bottom:0.6rem;">Power BI Desktop 내부의 로컬 서버와 통신하는 브릿지 CLI입니다.</p>
+          <ul>
+            <li><strong>무중단 실시간 새로고침 (<code>reload</code>)</strong>: 디스크의 PBIR JSON을 수정한 직후, 열려 있는 Power BI Desktop 화면을 즉시 리로드합니다.</li>
+            <li><strong>고해상도 스크린샷 캡처 (<code>screenshot</code>)</strong>: 4개 한글 리포트 페이지가 실제로 어떻게 렌더링되었는지 PNG 이미지로 찍어 에이전트에게 전달합니다.</li>
+            <li><strong>시각적 자가 교정 지원</strong>: 한글 제목이나 네비게이션 버튼(경영진 종합 요약 등)의 레이아웃이 깨지거나 줌 비율이 어긋나면 에이전트가 스크린샷을 눈으로 보고 재수정합니다.</li>
+          </ul>
+        </div>
+      </div>
+
+      <div class="item-reward">
+        <div class="item-idx">03</div>
+        <div>
+          <b>아이템 획득: 듀얼 CLI &amp; MCP 컨트롤러</b>
+          <span>한글 컬럼 기반의 DAX 계산은 MCP로 정확하게, 화면 구성과 시각 검수는 2종의 CLI로 처리하는 분업 체계를 갖추었습니다.</span>
+        </div>
+      </div>
+    </section>
+
+    <!-- SECTION 4: MICROSOFT AUTHORING AGENT SKILLS -->
+    <section id="sec-4" data-lv="5" data-title="스킬 아키텍트" data-stage="Chapter 04 · MS Authoring Agent Skills" data-agent="도구가 아무리 좋아도 쓰는 법을 모르면 소용없죠. MS가 배포한 4가지 공식 스킬과 내부 규칙(MUST/PREFER/AVOID)을 살펴봅시다." data-item="04. 공식 Authoring Skills 플러그인 장착!">
+      <div class="sec-meta">
+        <span class="chapter-badge">Chapter 04 · Agent Skills</span>
+        <span class="loc-badge">리포지토리: <b>github.com/microsoft/skills-for-fabric</b></span>
+      </div>
+      <h2>에이전트를 전문가로 바꾸는 <em>4대 Authoring Skills</em></h2>
+      <p class="lead">
+        Microsoft는 <code>microsoft/skills-for-fabric</code> 리포지토리를 통해 에이전트용 플러그인을 제공합니다. 각 스킬(<code>SKILL.md</code>)에는 데이터 시각화 베스트 프랙티스와 엄격한 작업 순서가 정의되어 있으며, <b>VS Code에서 열람 및 우리 회사 표준에 맞게 수정(Edit)</b>할 수 있습니다.
+      </p>
+
+      <div class="grid-4">
+        <div class="card">
+          <span class="card-tag tag-cyan">STEP 1 · 기획</span>
+          <h4><code>powerbi-report-planning</code></h4>
+          <p>"임원용 대시보드 만들어줘" 같은 모호한 요청을 받아 Guided Q&amp;A를 통해 타겟 독자, 핵심 질문, KPI를 정의하고 승인된 리포트 명세서(<code>report-spec.md</code>)를 확정(Lock)합니다.</p>
+        </div>
+        <div class="card">
+          <span class="card-tag tag-yellow">STEP 2 · 디자인</span>
+          <h4><code>powerbi-report-design</code></h4>
+          <p>코드를 짜기 전 페이지 아키타입(Archetypes), 적절한 차트 유형, 컬러 팔레트, 타이포그래피, 웹 접근성 기준을 먼저 수립합니다.</p>
+        </div>
+        <div class="card">
+          <span class="card-tag tag-emerald">STEP 3 · 구현 &amp; 검증</span>
+          <h4><code>powerbi-report-authoring</code></h4>
+          <p>2종의 CLI를 구동해 PBIR 페이지, 비주얼, 필터, 테마 파일을 생성하고, Desktop 리로드 및 스크린샷 시각 검수 루프를 완수합니다.</p>
+        </div>
+        <div class="card">
+          <span class="card-tag tag-rose">STEP 4 · 배포</span>
+          <h4><code>powerbi-report-management</code></h4>
+          <p>검증이 끝난 로컬 PBIP 리포트와 시맨틱 모델을 Microsoft Fabric 워크스페이스로 배포하고 관리합니다.</p>
+        </div>
+      </div>
+
+      <h3>스킬 내부 규칙 해부 (클릭하여 확인해 보세요)</h3>
+      <div class="rule-tabs">
+        <button class="rule-tab active" onclick="switchRule('must', this)">MUST (필수 준수 규칙)</button>
+        <button class="rule-tab" onclick="switchRule('prefer', this)">PREFER (권장 설계 규칙)</button>
+        <button class="rule-tab" onclick="switchRule('avoid', this)">AVOID (절대 금지 규칙)</button>
+        <button class="rule-tab" onclick="switchRule('custom', this)">VS Code 커스터마이징 방법</button>
+      </div>
+
+      <div id="rule-must" class="rule-panel active card">
+        <h4>MUST · 에이전트가 반드시 지켜야 하는 강제 사항</h4>
+        <ul>
+          <li><strong>시맨틱 모델 선행 검사</strong>: 디자인이나 차트 결정을 내리기 전에 반드시 시맨틱 모델의 테이블과 사용 가능한 한글 필드/측정값을 먼저 검사(Inspect)해야 합니다.</li>
+          <li><strong>두 가지 공식 CLI 사용 강제</strong>: 임의로 불완전한 JSON을 추측해서 작성하지 않고, 반드시 <code>powerbi-report-author</code>와 <code>powerbi-desktop</code> CLI가 둘 다 설치되어 있는지 확인하고 이를 통해 작업해야 합니다.</li>
+          <li><strong>Completion Gate (완료 관문) 통과</strong>: <code>[파일 편집 → CLI validate 통과 → Desktop reload → 전체 페이지 screenshot 촬영 및 시각적 검토]</code>를 모두 통과하기 전에는 작업 완료를 선언할 수 없습니다.</li>
+        </ul>
+      </div>
+
+      <div id="rule-prefer" class="rule-panel card">
+        <h4>PREFER · 품질 향상을 위한 권장 사항</h4>
+        <ul>
+          <li><strong>핵심 설계 입력만 질문</strong>: 결과물에 실질적인 영향을 미치는 누락된 디자인 입력값만 간결하게 질문합니다.</li>
+          <li><strong>모던 비주얼 및 네비게이터 활용</strong>: 다중 페이지 리포트의 경우 사용자가 리포트 안에서 자연스럽게 이동할 수 있도록 최신 <code>pageNavigator</code>(v2.1.0)와 모던 카드/차트 비주얼을 우선 채택합니다.</li>
+        </ul>
+      </div>
+
+      <div id="rule-avoid" class="rule-panel card">
+        <h4>AVOID · 환각 및 오류 방지를 위한 금지 사항</h4>
+        <ul>
+          <li><strong>설계 단계에서 파일 직접 생성 금지</strong>: <code>powerbi-report-design</code> 단계에서는 페이지, 비주얼, 필터, 테마나 PBIR 파일을 직접 생성하지 말고 디자인 가이던스만 확정해야 합니다.</li>
+          <li><strong>레거시/구형 비주얼 사용 금지</strong>: 구형 Q&amp;A 비주얼, Bing Maps 등 더 이상 권장되지 않는 레거시 시각적 개체를 생성하지 않습니다.</li>
+        </ul>
+      </div>
+
+      <div id="rule-custom" class="rule-panel card">
+        <h4>기업 맞춤형 스킬 수정 (Edit in VS Code)</h4>
+        <p>Claude Code의 <code>Customize &gt; Plugins &gt; PowerBI Authoring</code> 메뉴에서 각 스킬 우측의 <b>Edit &gt; Edit with VS Code</b>를 누르면 로컬에 설치된 <code>SKILL.md</code> 파일이 열립니다. 여기에 우리 회사의 고정 폰트(맑은 고딕/Pretendard), 원화(₩/원) 단위 표기 규칙, 로고 위치 등을 적어두면 사내 모든 분석가가 동일한 표준으로 리포트를 생성할 수 있습니다.</p>
+      </div>
+
+      <div class="item-reward">
+        <div class="item-idx">04</div>
+        <div>
+          <b>아이템 획득: 공식 Authoring Skills 플러그인</b>
+          <span>이제 에이전트가 아무 차트나 대충 그리지 않고, 데이터 시각화 전문가의 설계 절차와 자가 검증 루프를 따릅니다.</span>
+        </div>
+      </div>
+    </section>
+
+    <!-- SECTION 5: STEP-BY-STEP KOREAN PRACTICAL MANUAL -->
+    <section id="sec-5" data-lv="6" data-title="실전 구축 엔지니어" data-stage="Chapter 05 · 한결전자 실전 구축 Step-by-Step" data-agent="압축 파일(K_Retail_PowerBI_Agent_실습패키지.zip)과 100% 연동되는 한국어 실전 프롬프트입니다. 복사 버튼을 눌러 바로 실행해 보세요!" data-item="05. 한국어 실전 프롬프트 플레이북 획득!">
+      <div class="sec-meta">
+        <span class="chapter-badge">Chapter 05 · Korean Hands-On Manual</span>
+        <span class="loc-badge">현재 위치: <b>한결전자 실전 구축 워크스페이스</b></span>
+      </div>
+      <h2>그대로 복사해서 실행하는 <em>한국어 실습 매뉴얼</em></h2>
+      <p class="lead">
+        <a class="ext-link" href="kit/K_Retail_PowerBI_Agent_실습패키지_통합본.zip" download>실습 패키지 ZIP을 다운로드</a>하고 압축을 푼 뒤, CSV 5종을 Power BI Desktop에 불러와 <b><code>K_Retail_Sales_Demo.pbip</code></b>로 저장하고 아래 5단계를 순서대로 진행합니다.
+      </p>
+
+      <div class="step-list">
+        <div class="step-item">
+          <div class="step-num">STEP 01</div>
+          <div>
+            <h4>사전 준비: CLI 설치 및 플러그인 마켓플레이스 연동</h4>
+            <p style="color:var(--muted); font-size:0.92rem; margin-bottom:0.5rem;">Node.js가 설치된 상태에서 공식 CLI를 설치하고, Claude Code(또는 Copilot CLI)에 Microsoft 스킬 리포지토리를 등록합니다.</p>
+            <div class="code-block">
+              <div class="code-header">
+                <span>Terminal / Claude Code Plugin Setup</span>
+                <button class="copy-btn" onclick="copyCode(this)">복사</button>
+              </div>
+              <pre># 1. Power BI Report Authoring CLI 설치 확인
+npm install -g @microsoft/powerbi-report-authoring-cli
+
+# 2. Claude Code GUI에서 추가 시:
+# Customize -> Plugins -> Add (+) -> Add marketplace -> Add from repository 선택
+# 입력 URL: https://github.com/microsoft/skills-for-fabric -> Sync 클릭 -> 'powerbi-authoring' 설치
+
+# 3. 터미널/Copilot CLI 명령어로 추가 시:
+/plugin marketplace add microsoft/skills-for-fabric
+/plugin install powerbi-authoring@fabric-collection</pre>
+            </div>
+          </div>
+        </div>
+
+        <div class="step-item">
+          <div class="step-num">STEP 02</div>
+          <div>
+            <h4>시맨틱 모델 연결 및 한글 KPI DAX 측정값 자동 생성 (MCP 구동)</h4>
+            <p style="color:var(--muted); font-size:0.92rem; margin-bottom:0.5rem;">Power BI Desktop에서 <code>K_Retail_Sales_Demo.pbip</code> 파일을 열어둔 상태로, 해당 폴더에서 Claude Code 세션을 열고 아래 한국어 프롬프트를 입력합니다.</p>
+            <div class="code-block">
+              <div class="code-header">
+                <span>Prompt 1 · 모델 연결 및 한글 KPI DAX 측정값 생성</span>
+                <button class="copy-btn" onclick="copyCode(this)">복사</button>
+              </div>
+              <pre>현재 열려 있는 K_Retail_Sales_Demo.pbip 파일에 연결해 줘.
+시맨틱 모델 스키마를 확인한 뒤, 대시보드 KPI 카드와 차트에 사용할 핵심 DAX 측정값들을 'KPI 측정값'이라는 별도 폴더 안에 생성하고 모델에서 검증해 줘.
+(포함할 측정값 예시: 총매출액, 총원가, 매출총이익, 이익률(%), 총주문건수, 총판매수량, 고객당 평균매출, 전년 동기 대비 매출 성장률 YoY % 등)</pre>
+            </div>
+          </div>
+        </div>
+
+        <div class="step-item">
+          <div class="step-num">STEP 03</div>
+          <div>
+            <h4>Authoring Skill 호출 및 4페이지 한국어 대시보드 구축 (CLI + 자체 검수 루프)</h4>
+            <p style="color:var(--muted); font-size:0.92rem; margin-bottom:0.5rem;">
+              <b>중요 트러블슈팅 팁</b>: 슬래시 커맨드 인식 오류를 방지하기 위해 플러그인 네임스페이스가 포함된 정식 등록 명칭인 <code>powerbi-authoring:powerbi-report-authoring</code>을 프롬프트에 직접 명시합니다.
+            </p>
+            <div class="code-block">
+              <div class="code-header">
+                <span>Prompt 2 · 4페이지 한국어 경영진 리포트 및 페이지 네비게이션 자동 생성</span>
+                <button class="copy-btn" onclick="copyCode(this)">복사</button>
+              </div>
+              <pre>powerbi-authoring:powerbi-report-authoring 스킬을 사용해서 K_Retail_Sales_Demo.pbip 파일에 4페이지 분량의 한국어 경영진 리포트를 만들어 줘. 기존 빈 페이지는 삭제해도 돼.
+각 페이지 구성은 다음과 같아:
+- 1페이지: 경영진 종합 요약 (Executive Summary - 핵심 KPI 카드 5개, 월별 매출 추이, 카테고리별 성과, 연도 슬라이서)
+- 2페이지: 제품 및 브랜드 분석 (Product Analysis - 카테고리/브랜드별 매출 및 이익률 비교)
+- 3페이지: 권역 및 매장 분석 (Store Analysis - 서울/수도권/영남권/온라인 등 권역별 및 매장 유형별 성과)
+- 4페이지: 고객 세그먼트 및 매출 비교 (Customer & Sales Comparison - 고객등급/연령대별 분석 및 전년 대비 비교)
+
+리포트 상단에는 각 페이지로 이동할 수 있는 페이지 네비게이션(Page Navigator) 바를 추가하고, CLI 검증과 스크린샷 캡처 리뷰까지 완료해 줘.</pre>
+            </div>
+          </div>
+        </div>
+
+        <div class="step-item">
+          <div class="step-num">STEP 04</div>
+          <div>
+            <h4>한국형 브랜드 테마(<code>Retail_IQ_Light_KR.json</code>) 일괄 적용 및 색상 재정비(Re-sweep)</h4>
+            <p style="color:var(--muted); font-size:0.92rem; margin-bottom:0.5rem;">실습 폴더에 함께 들어 있는 맑은 고딕/Pretendard 기반 테마 파일(<code>Retail_IQ_Light_KR.json</code>)을 적용하여 리포트 전체 디자인을 통일합니다.</p>
+            <div class="code-block">
+              <div class="code-header">
+                <span>Prompt 3 · 한국형 브랜드 테마 JSON 적용</span>
+                <button class="copy-btn" onclick="copyCode(this)">복사</button>
+              </div>
+              <pre>폴더 안에 있는 Retail_IQ_Light_KR.json 파일을 이 리포트의 커스텀 테마로 등록하고, 개별 비주얼에 하드코딩된 색상들을 새 테마 팔레트에 맞게 전체 재정비(Re-sweep)한 뒤 다시 검증해 줘.</pre>
+            </div>
+          </div>
+        </div>
+
+        <div class="step-item">
+          <div class="step-num">STEP 05</div>
+          <div>
+            <h4>최종 확인 시 주의사항: "저장하지 않고 닫기 (Don't Save)"</h4>
+            <p style="color:var(--muted); font-size:0.92rem;">
+              에이전트가 디스크의 PBIR 파일들을 직접 수정했으므로, 만약 수동으로 Power BI Desktop을 껐다 켜서 확인해야 할 때는 기존에 열려 있던 창을 닫을 때 반드시 <b>'저장 안 함(Don't Save)'</b>을 클릭한 뒤 <code>K_Retail_Sales_Demo.pbip</code>를 다시 열어야 합니다. '저장'을 누르면 예전 빈 화면 상태가 에이전트가 작성한 새로운 JSON 파일들을 덮어써 버립니다.
+            </p>
+          </div>
+        </div>
+      </div>
+
+      <div class="item-reward">
+        <div class="item-idx">05</div>
+        <div>
+          <b>아이템 획득: 한국어 실전 프롬프트 플레이북 &amp; 트러블슈팅 가이드</b>
+          <span>실습 패키지의 파일명과 100% 일치하는 프롬프트 세트로 언제든 시연과 실습을 재현할 수 있습니다.</span>
+        </div>
+      </div>
+    </section>
+
+    <!-- SECTION 6: COST & MS LEARN REFERENCES -->
+    <section id="sec-6" data-lv="7" data-title="척척박사 BI 마스터" data-stage="Chapter 06 · 비용 분석 및 MS Learn 공식 문서" data-agent="축하합니다! 모든 여정을 마쳤습니다. 토큰 비용 분석과 참조된 MS 공식 문서 링크들을 북마크해 두세요." data-item="06. 척척박사 BI 아키텍트 학위 취득!">
+      <div class="sec-meta">
+        <span class="chapter-badge">Chapter 06 · Cost &amp; Official References</span>
+        <span class="loc-badge">현재 위치: <b>명예의 전당</b></span>
+      </div>
+      <h2>토큰 비용 분석과 <em>Microsoft 공식 레퍼런스</em></h2>
+      <p class="lead">
+        영상 마지막에 공개된 실제 토큰 사용량(`/context` 명령어 조회 결과)과 이 아키텍처를 구성하는 Microsoft 공식 문서(MS Learn, GitHub, Fabric Blog) 전체 목록입니다.
+      </p>
+
+      <div class="grid-2">
+        <div class="card">
+          <span class="card-tag tag-yellow">토큰 사용량 및 비용 분석 (/context)</span>
+          <h4>4페이지 대시보드 구축 총 비용: 약 $3 ~ $5 USD</h4>
+          <ul>
+            <li><strong>총 소모 토큰</strong>: <code>259,000 Tokens (259k)</code></li>
+            <li><strong>시스템 &amp; 스킬 도구 영역</strong>: 약 <code>52k Tokens</code> (전체 비중의 약 20%)</li>
+            <li><strong>대화 &amp; 스크린샷 멀티모달 검수 영역</strong>: 약 <code>207k Tokens</code> (고해상도 스크린샷을 반복 캡처하여 시각적으로 리뷰하는 과정에서 대부분의 토큰 사용)</li>
+            <li><strong>비용 환산</strong>: 1M 입력 토큰당 $5, 1M 출력 토큰당 $25 기준 시 <b>약 $3~$5 USD (한화 약 4,200원~7,000원)</b>로 엔터프라이즈급 4페이지 리포트 완성</li>
+          </ul>
+        </div>
+
+        <div class="card highlight">
+          <span class="card-tag tag-cyan">향후 로드맵 (Upcoming Features)</span>
+          <h4>영상에서 예고된 차세대 확장 워크플로우</h4>
+          <ul>
+            <li><strong>PowerShell + GitHub Copilot 연동</strong>: Claude 대신 PowerShell 터미널에서 MS Copilot과 CLI를 직결하는 방식</li>
+            <li><strong>Fabric Apps for Semantic Models</strong>: Power BI June 2026 업데이트의 또 다른 핵심 기능으로, 시맨틱 모델 위에 바로 맞춤형 애플리케이션을 구축하는 기능</li>
+            <li><strong>New Desktop Bridge 고도화</strong>: 로컬 Power BI Desktop과 외부 AI 에이전트 간의 양방향 실시간 제어 확장</li>
+          </ul>
+        </div>
+      </div>
+
+      <h3>참조된 Microsoft 공식 문서 및 GitHub 링크 모음</h3>
+      <div class="table-wrap">
+        <table>
+          <thead>
+            <tr>
+              <th>분류</th>
+              <th>문서 / 리포지토리 제목</th>
+              <th>공식 URL 링크</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td><b>GitHub (필수)</b></td>
+              <td><b>Microsoft Skills for Fabric 공식 리포지토리</b><br><small style="color:var(--muted);">Claude Code / Copilot 플러그인 마켓플레이스 등록 소스</small></td>
+              <td><a class="ext-link" href="https://github.com/microsoft/skills-for-fabric" target="_blank" rel="noopener">github.com/microsoft/skills-for-fabric</a></td>
+            </tr>
+            <tr>
+              <td><b>GitHub</b></td>
+              <td><b>PBIR CLI Authoring 상세 레퍼런스 (SKILL 문서)</b><br><small style="color:var(--muted);"><code>powerbi-report-author</code> 및 <code>powerbi-desktop</code> 명령어 명세</small></td>
+              <td><a class="ext-link" href="https://github.com/microsoft/skills-for-fabric/blob/main/skills/powerbi-report-cli/references/authoring.md" target="_blank" rel="noopener">skills/powerbi-report-cli/references/authoring.md</a></td>
+            </tr>
+            <tr>
+              <td><b>MS Learn</b></td>
+              <td><b>Power BI Report Authoring Skill 공식 개요</b><br><small style="color:var(--muted);">Planner, Design, Authoring 에이전트 스킬 아키텍처 설명</small></td>
+              <td><a class="ext-link" href="https://learn.microsoft.com/en-us/power-bi/developer/agentic/power-bi-report-authoring-skill-overview" target="_blank" rel="noopener">learn.microsoft.com/.../power-bi-report-authoring-skill-overview</a></td>
+            </tr>
+            <tr>
+              <td><b>MS Learn</b></td>
+              <td><b>Power BI Authoring (Modeling) MCP Server 문서</b><br><small style="color:var(--muted);">시맨틱 모델 연결, TMDL 조작 및 DAX 쿼리 실행 MCP 가이드</small></td>
+              <td><a class="ext-link" href="https://learn.microsoft.com/en-us/power-bi/developer/mcp/power-bi-authoring-mcp" target="_blank" rel="noopener">learn.microsoft.com/.../mcp/power-bi-authoring-mcp</a></td>
+            </tr>
+            <tr>
+              <td><b>MS Learn</b></td>
+              <td><b>Power BI Desktop Projects (PBIP / PBIR / TMDL) 개요</b><br><small style="color:var(--muted);">코드 기반 프로젝트 포맷 및 폴더 구조 공식 문서</small></td>
+              <td><a class="ext-link" href="https://learn.microsoft.com/en-us/power-bi/developer/projects/projects-overview" target="_blank" rel="noopener">learn.microsoft.com/.../projects/projects-overview</a></td>
+            </tr>
+            <tr>
+              <td><b>Fabric Blog</b></td>
+              <td><b>AI-Powered Power BI Reporting with Agent Skills</b><br><small style="color:var(--muted);">영상 초반(01:32)에 소개된 June 2026 공식 발표 블로그 원문</small></td>
+              <td><a class="ext-link" href="https://community.fabric.microsoft.com/blog/fbc_pbiupdatesblog/ai-powered-power-bi-reporting-from-design-to-deployment-with-agent-skills-previe/5190703" target="_blank" rel="noopener">community.fabric.microsoft.com/.../5190703</a></td>
+            </tr>
+            <tr>
+              <td><b>Fabric Blog</b></td>
+              <td><b>Power BI June 2026 Feature Summary &amp; Desktop Bridge</b><br><small style="color:var(--muted);">2026년 6월 전체 업데이트 요약 및 Desktop Bridge 프리뷰 안내</small></td>
+              <td><a class="ext-link" href="https://community.fabric.microsoft.com/blog/fbc_pbiupdatesblog/power-bi-june-2026-feature-summary/5193264" target="_blank" rel="noopener">community.fabric.microsoft.com/.../5193264</a></td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+
+      <div class="item-reward">
+        <div class="item-idx">06</div>
+        <div>
+          <b>최종 학위 취득: 척척박사 Power BI 에이전트 아키텍트 (Lv.MAX)</b>
+          <span>이제 한결전자 실습 패키지와 이 인터랙티브 매뉴얼로 완벽한 에이전트 기반 BI 구축을 시연하실 수 있습니다.</span>
+        </div>
+      </div>
+    </section>
+
+  </main>
+
+  <script>
+    const sections = Array.from(document.querySelectorAll('main section'));
+    const hdrLv = document.getElementById('hdr-lv');
+    const hdrExp = document.getElementById('hdr-exp');
+    const hdrTitle = document.getElementById('hdr-title');
+    const hdrStage = document.getElementById('hdr-stage');
+    const agentSpeech = document.getElementById('agent-speech');
+    const sideNav = document.getElementById('side-nav');
+    const mapGrid = document.getElementById('map-grid');
+    const itemToast = document.getElementById('item-toast');
+    const toastText = document.getElementById('toast-text');
+
+    let currentIdx = 0;
+    const seenItems = new Set();
+    let toastTimer = null;
+
+    // Build Side Dots & Map Modal
+    sections.forEach((sec, idx) => {
+      const stage = sec.getAttribute('data-stage');
+      const lv = sec.getAttribute('data-lv');
+
+      // Dot
+      const dot = document.createElement('div');
+      dot.className = 'nav-dot' + (idx === 0 ? ' active' : '');
+      dot.setAttribute('data-label', stage);
+      dot.onclick = () => sec.scrollIntoView({ behavior: 'smooth' });
+      sideNav.appendChild(dot);
+
+      // Map card
+      const mItem = document.createElement('div');
+      mItem.className = 'map-item';
+      mItem.innerHTML = `<small>Lv.${lv}</small><b>${stage}</b>`;
+      mItem.onclick = () => {
+        toggleMap(false);
+        sec.scrollIntoView({ behavior: 'smooth' });
+      };
+      mapGrid.appendChild(mItem);
+    });
+
+    const dots = Array.from(document.querySelectorAll('.nav-dot'));
+
+    function showToast(text) {
+      if (!text) return;
+      toastText.textContent = text;
+      itemToast.classList.add('show');
+      if (toastTimer) clearTimeout(toastTimer);
+      toastTimer = setTimeout(() => {
+        itemToast.classList.remove('show');
+      }, 3200);
+    }
+
+    const observer = new IntersectionObserver((entries) => {
+      entries.forEach(entry => {
+        if (entry.isIntersecting) {
+          const sec = entry.target;
+          const idx = sections.indexOf(sec);
+          currentIdx = idx;
+
+          const lv = sec.getAttribute('data-lv');
+          const title = sec.getAttribute('data-title');
+          const stage = sec.getAttribute('data-stage');
+          const speech = sec.getAttribute('data-agent');
+          const item = sec.getAttribute('data-item');
+
+          hdrLv.textContent = lv;
+          hdrTitle.textContent = title;
+          hdrStage.innerHTML = `현재 위치: <b>${stage}</b>`;
+          hdrExp.style.width = `${Math.round((lv / sections.length) * 100)}%`;
+          agentSpeech.textContent = speech;
+
+          dots.forEach((d, i) => d.classList.toggle('active', i === idx));
+
+          if (item && !seenItems.has(idx)) {
+            seenItems.add(idx);
+            showToast(item);
+          }
+        }
+      });
+    }, { threshold: 0.42 });
+
+    sections.forEach(s => observer.observe(s));
+
+    function moveSection(delta) {
+      const next = Math.max(0, Math.min(sections.length - 1, currentIdx + delta));
+      sections[next].scrollIntoView({ behavior: 'smooth' });
+    }
+
+    function toggleMap(force) {
+      const modal = document.getElementById('map-modal');
+      const isOpen = modal.classList.contains('open');
+      const nextState = typeof force === 'boolean' ? force : !isOpen;
+      modal.classList.toggle('open', nextState);
+    }
+
+    function switchRule(key, btn) {
+      document.querySelectorAll('.rule-tab').forEach(b => b.classList.remove('active'));
+      document.querySelectorAll('.rule-panel').forEach(p => p.classList.remove('active'));
+      btn.classList.add('active');
+      document.getElementById('rule-' + key).classList.add('active');
+    }
+
+    function copyCode(btn) {
+      const pre = btn.closest('.code-block').querySelector('pre');
+      navigator.clipboard.writeText(pre.innerText).then(() => {
+        const orig = btn.textContent;
+        btn.textContent = '복사 완료!';
+        setTimeout(() => btn.textContent = orig, 1500);
+      });
+    }
+
+    window.addEventListener('keydown', (e) => {
+      if (e.key === 'ArrowRight' || e.key === 'PageDown') {
+        e.preventDefault();
+        moveSection(1);
+      } else if (e.key === 'ArrowLeft' || e.key === 'PageUp') {
+        e.preventDefault();
+        moveSection(-1);
+      } else if (e.key === 'm' || e.key === 'M') {
+        toggleMap();
+      } else if (e.key === 'Escape') {
+        toggleMap(false);
+      }
+    });
+  </script>
+</body>
+</html>
