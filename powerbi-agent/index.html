@@ -186,9 +186,12 @@
       pointer-events: none;
     }
     .agent-character {
-      width: 104px;
-      height: 104px;
-      flex: 0 0 104px;
+      position: relative;
+      z-index: 1;
+      width: 144px;
+      height: 144px;
+      flex: 0 0 144px;
+      margin-left: -28px;
       object-fit: contain;
       filter: drop-shadow(0 5px 8px rgba(0, 0, 0, 0.3));
     }
@@ -800,7 +803,7 @@
       .side-nav { display: none; }
       .step-item { grid-template-columns: 1fr; }
       .agent-bar { width: min(340px, calc(100vw - 12px)); gap: 0.45rem; }
-      .agent-character { width: 76px; height: 76px; flex-basis: 76px; }
+      .agent-character { width: 112px; height: 112px; flex-basis: 112px; margin-left: -24px; }
       .agent-text { font-size: 0.82rem; padding: 0.8rem; margin-bottom: 18px; }
     }
     @media (max-width: 480px) {
