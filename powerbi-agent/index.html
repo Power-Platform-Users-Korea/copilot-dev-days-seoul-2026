@@ -678,6 +678,13 @@
       font-size: 0.9rem;
     }
     .tool-guide pre { white-space: pre-wrap; overflow-wrap: anywhere; }
+    .measure-stage {
+      margin-top: 1.4rem;
+      padding-top: 1.2rem;
+      border-top: 1px solid var(--border);
+    }
+    .measure-stage h5 { font-size: 1rem; color: var(--accent); margin-bottom: 0.6rem; }
+    .measure-stage p + p { margin-top: 0.6rem; }
     .copy-status { color: var(--cyan); font-size: 0.85rem; }
 
     a.ext-link {
@@ -1106,7 +1113,7 @@
       </div>
       <h2>그대로 복사해서 실행하는 <em>한국어 실습 매뉴얼</em></h2>
       <p class="lead">
-        <a class="ext-link" href="kit/K_Retail_PowerBI_Agent_실습패키지_통합본.zip" download>실습 패키지 ZIP을 다운로드</a>하고 압축을 푼 뒤, CSV 5종을 Power BI Desktop에 불러와 <b><code>K_Retail_Sales_Demo.pbip</code></b>로 저장하고 아래 5단계를 순서대로 진행합니다.
+        <a class="ext-link" href="kit/K_Retail_PowerBI_Agent_실습패키지_통합본.zip" download>실습 패키지 ZIP을 다운로드</a>하고 압축을 푼 뒤, CSV 5종을 Power BI Desktop에 불러와 <b><code>K_Retail_Sales_Demo.pbip</code></b>로 저장하고 아래 6단계를 순서대로 진행합니다. STEP 2에서는 연결만 확인하고, STEP 3에서 측정값을 설계·생성·검증합니다.
       </p>
       <div class="tool-note">
         <b>Claude 전용 실습이 아닙니다.</b> 아래에서 사용하는 도구 하나만 선택하세요. VS Code는 편집기이므로 이 안내에서는 GitHub Copilot Chat을 사용합니다. GitHub Copilot 버튼은 별도 터미널 앱인 Copilot CLI 기준입니다.
@@ -1164,7 +1171,8 @@ Microsoft 공식 microsoft/skills-for-fabric 저장소의 설치 방법을 확�
         <div class="step-item" id="step-2">
           <div class="step-num">STEP 02</div>
           <div class="tool-guide">
-            <h4>Desktop 열어두기 → 프로젝트 폴더 지정 → 모델 연결</h4>
+            <h4>Desktop 열어두기 → 프로젝트 폴더 지정 → 연결 확인만</h4>
+            <p><b>목적:</b> 에이전트가 다른 파일이 아니라 내가 실습할 모델을 보고 있는지 확인합니다. 이 단계에서는 측정값이나 보고서를 변경하지 않습니다.</p>
             <p>Windows의 Power BI Desktop에서 <code>K_Retail_Sales_Demo.pbip</code>를 열고, 수동 작업을 저장한 뒤 창을 켜 두세요. 아래 경로는 예시이므로 실제로 저장한 폴더로 바꿉니다.</p>
             <p class="tool-note"><b>선택할 폴더:</b> <code>.pbip</code> 파일과 <code>.Report</code>·<code>.SemanticModel</code> 폴더가 함께 들어 있는 상위 실습 폴더입니다. ZIP 파일 자체나 <code>.Report</code> 하위 폴더만 선택하지 마세요. STEP 1·2의 도구 선택은 함께 바뀝니다.</p>
             <div class="tool-picker" role="group" aria-label="STEP 2 사용할 도구" hidden>
@@ -1179,7 +1187,7 @@ Microsoft 공식 microsoft/skills-for-fabric 저장소의 설치 방법을 확�
               <p id="connect-location">Claude Code를 .pbip가 있는 폴더에서 시작하고 아래 프롬프트를 입력하세요.</p>
               <ol id="connect-instructions">
                 <li>실습 폴더를 작업 폴더로 지정하고 .pbip 파일이 보이는지 확인합니다.</li>
-                <li>먼저 열린 모델과 파일 경로가 맞는지 확인한 뒤 측정값 생성을 승인합니다.</li>
+                <li>열린 모델과 파일 경로가 맞는지 확인합니다. 측정값 작업은 STEP 3에서 별도로 진행합니다.</li>
               </ol>
               <p class="tool-note" id="connect-note">파일을 채팅에 첨부하는 것만으로는 프로젝트 폴더 지정이나 MCP 연결이 완료되지 않습니다.</p>
               <div class="code-block tool-commands" id="connect-command-block" hidden>
@@ -1191,32 +1199,90 @@ Microsoft 공식 microsoft/skills-for-fabric 저장소의 설치 방법을 확�
               </div>
             <div class="code-block">
               <div class="code-header">
-                <span id="connect-prompt-label">채팅창에 입력 · 모델 연결 및 한글 KPI DAX 측정값 생성</span>
+                <span id="connect-prompt-label">채팅창에 입력 · 모델 연결 확인만</span>
                 <button class="copy-btn" onclick="copyCode(this)">복사</button>
               </div>
               <pre id="connect-prompt">현재 작업 폴더의 K_Retail_Sales_Demo.pbip와 같은 Windows 환경에서 열려 있는 Power BI Desktop 모델에 연결해 줘.
 먼저 작업 폴더의 절대 경로, PBIP 경로, 열린 Desktop 인스턴스와 모델 이름을 보여줘. 여러 인스턴스가 있거나 대상이 불명확하면 나에게 선택을 요청해 줘.
 로컬 Power BI Authoring MCP로 테이블·열·관계를 확인하고, 실습 CSV 5종이 로드된 모델이 맞는지 점검해 줘.
-핵심 DAX 측정값을 'KPI 측정값' 표시 폴더에 생성하는 계획을 보여준 뒤 내 승인을 받고 적용해 줘.
-대상: 총매출액, 총원가, 매출총이익, 이익률(%), 총주문건수, 총판매수량, 고객당 평균매출, 전년 동기 대비 매출 성장률 YoY %.
-기존 측정값은 재사용하고, 주문수량과 제품 단가·원가의 관계 및 날짜 관계를 확인해 계산해 줘. 없는 열이나 도구를 추측하지 마.
-생성 후 모델에서 DAX를 실행해 오류와 결과를 검증하고, Desktop에서 저장이 필요한 변경 사항을 알려줘.
-연결 또는 권한 오류가 나면 정확한 원인과 해결 절차를 보여주고 중단해 줘. 이 단계에서는 보고서 화면을 수정하거나 Fabric에 게시하지 마.</pre>
+연결 또는 권한 오류가 나면 원인과 해결 절차를 보여주고 중단해 줘. 이 단계는 연결 확인만 하고, 모델·측정값·보고서를 변경하거나 Fabric에 게시하지 마.</pre>
             </div>
+            <p class="tool-note"><b>완료 기준:</b> 올바른 PBIP 경로·Desktop 모델 이름과 CSV 5종에 대응하는 테이블 목록이 확인되면 STEP 3으로 넘어갑니다. 연결 실패나 대상 불일치가 남아 있으면 먼저 해결하세요.</p>
             </div>
           </div>
         </div>
 
-        <div class="step-item">
+        <div class="step-item" id="step-3">
           <div class="step-num">STEP 03</div>
+          <div class="tool-guide">
+            <h4>측정값 만들기: 설계 → 생성 → 검증</h4>
+            <p><b>목적:</b> 보고서에 표시할 매출·이익·성장률의 계산 기준을 먼저 정하고, 승인한 계산식만 모델에 추가한 뒤 실제 숫자가 맞는지 확인합니다. 측정값은 필터 조건에 맞춰 값을 계산하는 DAX 수식이며, 여기서는 아직 차트를 만들지 않습니다.</p>
+            <p class="tool-note"><b>진행 방법:</b> STEP 2에서 연결한 같은 Windows 에이전트 채팅창을 사용하세요. 아래 프롬프트를 한 번에 모두 넣지 말고, 각 단계의 응답과 완료 기준을 확인한 뒤 다음 프롬프트를 입력합니다. 도구가 달라도 세 프롬프트는 공통입니다.</p>
+
+            <article class="measure-stage" id="step-3-1">
+              <h5>3-1 · 무엇을 어떻게 계산할지 설계하기</h5>
+              <p><b>왜 하나요?</b> 주문 건수와 주문 항목 수는 다르고, 고객당 매출도 어떤 고객을 분모로 삼는지에 따라 달라집니다. AI에게 곧바로 생성을 맡기기 전에 계산의 의미와 필요한 관계를 확인합니다.</p>
+              <div class="code-block">
+                <div class="code-header">
+                  <span>3-1 프롬프트 · 설계만 요청</span>
+                  <button type="button" class="copy-btn" onclick="copyCode(this)">복사</button>
+                </div>
+                <pre>STEP 2에서 확인한 모델을 기준으로 KPI 측정값 설계안을 표로 보여줘. 아직 모델은 변경하지 마.
+대상: 총매출액, 총원가, 매출총이익, 이익률(%), 총주문건수, 총판매수량, 고객당 평균매출, 전년 동기 대비 매출 성장률 YoY %.
+각 항목의 업무 의미, 사용할 실제 열·관계, DAX 초안, 표시 형식, 기존 측정값 재사용 여부를 적어줘.
+주문수량과 제품 단가·원가의 관계, 주문번호의 중복, 고객당 매출의 분모, 날짜 테이블·날짜 관계와 전년 데이터 유무를 확인해 줘.
+없는 열은 추측하지 말고, 모호한 계산 기준이나 필요한 모델 수정은 나에게 질문한 뒤 멈춰줘.</pre>
+              </div>
+              <p class="tool-note"><b>완료 기준:</b> 8개 KPI의 의미·계산식·표시 형식을 이해하고, 모호한 기준과 관계 문제를 해결한 설계안이 있어야 합니다. 수정할 점은 이 대화에서 먼저 요청하세요. 동의한 설계안이 준비되면 3-2로 갑니다.</p>
+            </article>
+
+            <article class="measure-stage" id="step-3-2">
+              <h5>3-2 · 승인한 측정값을 모델에 생성하기</h5>
+              <p><b>왜 하나요?</b> 설계안은 아직 문서일 뿐입니다. 확인한 DAX를 실제 모델에 등록하고 <code>KPI 측정값</code> 표시 폴더에 모아, 다음 보고서 생성 단계에서 재사용할 수 있게 합니다. 표시 폴더는 파일 탐색기의 폴더가 아니라 모델 안의 정리 항목입니다.</p>
+              <div class="code-block">
+                <div class="code-header">
+                  <span>3-2 프롬프트 · 설계 확인 후 생성 승인</span>
+                  <button type="button" class="copy-btn" onclick="copyCode(this)">복사</button>
+                </div>
+                <pre>앞에서 함께 확인한 최종 KPI 설계안을 승인해. 로컬 Power BI Authoring MCP로 해당 측정값을 모델에 적용해 줘.
+같은 의미의 기존 측정값은 재사용하고, 새 측정값은 'KPI 측정값' 표시 폴더에 정리하고 승인한 표시 형식을 설정해 줘.
+기존 측정값을 바꿔야 하거나 테이블·관계 수정이 추가로 필요하면, 변경 내용을 보여주고 별도 승인을 받아줘.
+적용 후 측정값 이름·DAX·표시 폴더·표시 형식을 다시 읽어 생성·재사용·실패 목록을 보여줘. 실패는 숨기지 마.
+아직 보고서 화면을 수정하거나 Fabric에 게시하지 마.</pre>
+              </div>
+              <p class="tool-note"><b>완료 기준:</b> 승인한 KPI가 실제 모델에 존재하고, 재조회 결과와 생성·재사용 목록이 일치해야 합니다. 생성 오류가 남았다면 해결한 뒤 3-3으로 넘어갑니다.</p>
+            </article>
+
+            <article class="measure-stage" id="step-3-3">
+              <h5>3-3 · 숫자를 검증하고 저장하기</h5>
+              <p><b>왜 하나요?</b> 수식이 등록됐다고 숫자까지 맞는 것은 아닙니다. 전체 합계와 연도별 결과를 실제로 조회하고, 원본 데이터 기준 계산과 비교해 보고서에 쓸 수 있는 KPI인지 확인합니다.</p>
+              <div class="code-block">
+                <div class="code-header">
+                  <span>3-3 프롬프트 · 결과 검증과 저장 안내</span>
+                  <button type="button" class="copy-btn" onclick="copyCode(this)">복사</button>
+                </div>
+                <pre>방금 생성·재사용한 KPI를 모델에서 DAX 쿼리로 실행해 전체 합계와 연도별 결과를 표로 보여줘.
+매출·원가·수량·고유 주문 수·고객당 매출을 원본 열 기준의 독립 집계와 비교하고, 매출총이익과 이익률도 검산해 줘.
+YoY는 비교 가능한 전년 데이터와 날짜 필터를 확인하고, 전년 값이 없거나 0일 때의 빈 값·처리를 설명해 줘.
+검사 항목별 통과·실패·확인 불가와 근거를 보여줘. 수정이 필요하면 원인을 설명하고 승인받은 뒤 고치고 다시 검증해 줘.
+Desktop에서 PBIP로 저장하는 방법을 안내해 줘. 내가 저장한 다음에는 디스크의 시맨틱 모델 정의에도 측정값이 반영됐는지 확인해 줘.
+검증과 저장 확인이 끝날 때까지 보고서 생성이나 Fabric 게시로 넘어가지 마.</pre>
+              </div>
+              <p class="tool-note"><b>완료 기준:</b> 검증 표에 설명되지 않은 실패가 없어야 합니다. 예상된 YoY 빈 값은 이유를 확인하세요. Desktop에서 저장한 뒤 채팅에 “저장했어. 디스크 반영을 확인해 줘.”라고 입력하고, 반영 확인까지 끝나면 STEP 4로 넘어갑니다.</p>
+            </article>
+          </div>
+        </div>
+
+        <div class="step-item" id="step-4">
+          <div class="step-num">STEP 04</div>
           <div>
             <h4>Authoring Skill 호출 및 4페이지 한국어 대시보드 구축 (CLI + 자체 검수 루프)</h4>
             <p style="color:var(--muted); font-size:0.92rem; margin-bottom:0.5rem;">
-              STEP 2에서 연결한 같은 에이전트 채팅창에 입력하세요. 스킬 이름은 설치 버전에 따라 다릅니다. 현재 통합 스킬은 <code>powerbi-report-cli</code>이며, 이전 버전의 <code>powerbi-report-authoring</code>만 보인다면 설치된 스킬을 사용하도록 요청하세요.
+              STEP 3에서 KPI 검증과 저장까지 마친 뒤 같은 에이전트 채팅창에 입력하세요. 스킬 이름은 설치 버전에 따라 다릅니다. 현재 통합 스킬은 <code>powerbi-report-cli</code>이며, 이전 버전의 <code>powerbi-report-authoring</code>만 보인다면 설치된 스킬을 사용하도록 요청하세요.
             </p>
             <div class="code-block">
               <div class="code-header">
-                <span>Prompt 2 · 4페이지 한국어 경영진 리포트 및 페이지 네비게이션 자동 생성</span>
+                <span>STEP 4 프롬프트 · 4페이지 한국어 경영진 리포트 및 페이지 네비게이션 자동 생성</span>
                 <button class="copy-btn" onclick="copyCode(this)">복사</button>
               </div>
               <pre>설치된 Power BI 보고서 스킬(powerbi-report-cli, 이전 버전은 powerbi-report-authoring)을 사용해서 K_Retail_Sales_Demo.pbip 파일에 4페이지 분량의 한국어 경영진 리포트를 만들어 줘. 기존 빈 페이지는 삭제해도 돼.
@@ -1231,14 +1297,14 @@ Microsoft 공식 microsoft/skills-for-fabric 저장소의 설치 방법을 확�
           </div>
         </div>
 
-        <div class="step-item">
-          <div class="step-num">STEP 04</div>
+        <div class="step-item" id="step-5">
+          <div class="step-num">STEP 05</div>
           <div>
             <h4>한국형 브랜드 테마(<code>Retail_IQ_Light_KR.json</code>) 일괄 적용 및 색상 재정비(Re-sweep)</h4>
             <p style="color:var(--muted); font-size:0.92rem; margin-bottom:0.5rem;">실습 폴더에 함께 들어 있는 맑은 고딕/Pretendard 기반 테마 파일(<code>Retail_IQ_Light_KR.json</code>)을 적용하여 리포트 전체 디자인을 통일합니다.</p>
             <div class="code-block">
               <div class="code-header">
-                <span>Prompt 3 · 한국형 브랜드 테마 JSON 적용</span>
+                <span>STEP 5 프롬프트 · 한국형 브랜드 테마 JSON 적용</span>
                 <button class="copy-btn" onclick="copyCode(this)">복사</button>
               </div>
               <pre>폴더 안에 있는 Retail_IQ_Light_KR.json 파일을 이 리포트의 커스텀 테마로 등록하고, 개별 비주얼에 하드코딩된 색상들을 새 테마 팔레트에 맞게 전체 재정비(Re-sweep)한 뒤 다시 검증해 줘.</pre>
@@ -1246,8 +1312,8 @@ Microsoft 공식 microsoft/skills-for-fabric 저장소의 설치 방법을 확�
           </div>
         </div>
 
-        <div class="step-item">
-          <div class="step-num">STEP 05</div>
+        <div class="step-item" id="step-6">
+          <div class="step-num">STEP 06</div>
           <div>
             <h4>최종 확인 시 주의사항: "저장하지 않고 닫기 (Don't Save)"</h4>
             <p style="color:var(--muted); font-size:0.92rem;">

@@ -31,6 +31,7 @@
 - [실습 패키지 ZIP](powerbi-agent/kit/K_Retail_PowerBI_Agent_실습패키지_통합본.zip): CSV 5종, 테마 JSON, 실습 가이드, 원본 HTML 매뉴얼이 포함되어 있습니다.
 - 고객·매출 데이터는 교육용 가상 데이터입니다. ZIP 내 HTML은 최초 제공본이며, 최신 매뉴얼은 웹페이지를 참고하세요.
 - 웹 매뉴얼 STEP 1·2에서 Claude Code, VS Code의 Copilot Chat, Codex 확장, Copilot CLI, Windows PowerShell, Mac Bash별 설치·폴더 지정 안내와 복사할 프롬프트/명령어를 선택할 수 있습니다. PowerShell 안내는 Copilot CLI로 이어지며, Mac은 도구 준비만 가능합니다. Desktop·로컬 MCP 실습은 같은 Windows 환경에서 실행합니다.
+- STEP 2는 모델 연결 확인만 진행합니다. STEP 3은 측정값 설계(3-1) → 승인 후 생성(3-2) → 숫자 검증·저장(3-3)으로 나뉘며, 각각 목적·복사 프롬프트·완료 기준을 제공합니다. 이후 STEP 4는 보고서 생성, STEP 5는 테마 적용, STEP 6은 최종 확인입니다.
 
 | 시간 | 세션 | 발표자 |
 | --- | --- | --- |
