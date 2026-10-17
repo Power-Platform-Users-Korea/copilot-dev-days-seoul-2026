@@ -28,6 +28,7 @@
 ### Power BI 에이전트 실습 자료
 
 - [한국어 인터랙티브 매뉴얼](powerbi-agent/): 설명은 짧게 줄이고, 흐름·스택·스타 스키마·도구 허브·자가 검수 루프·토큰 도넛 차트 같은 애니메이션 도식으로 내용을 보여 줍니다. 그림은 화면에 들어올 때 움직이며, 동작 줄이기 설정에서는 완성된 상태로 바로 표시됩니다. 이후 수정은 `powerbi-agent/index.html`에 반영합니다.
+- 범위 비교 막대는 실습 목표를 설명하는 개념도이며, 토큰 도넛 차트는 가정 예시입니다. 실측 성능이나 실습 비용을 나타내지 않으며, 실제 요금과 사용 한도는 선택한 도구에서 확인합니다.
 - [실습 패키지 ZIP](powerbi-agent/kit/K_Retail_PowerBI_Agent_실습패키지_통합본.zip): CSV 5종, 테마 JSON, 실습 가이드, 원본 HTML 매뉴얼이 포함되어 있습니다.
 - 고객·매출 데이터는 교육용 가상 데이터입니다. ZIP 내 HTML은 최초 제공본이며, 최신 매뉴얼은 웹페이지를 참고하세요.
 - 웹 매뉴얼 STEP 1·2에서 Claude Code, VS Code의 Copilot Chat, Codex 확장, Copilot CLI, Windows PowerShell, Mac Bash별 설치·폴더 지정 안내와 복사할 프롬프트/명령어를 선택할 수 있습니다. PowerShell 안내는 Copilot CLI로 이어지며, Mac은 도구 준비만 가능합니다. Desktop·로컬 MCP 실습은 같은 Windows 환경에서 실행합니다.
