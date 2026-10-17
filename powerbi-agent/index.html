@@ -707,6 +707,62 @@
     .epilogue-link.primary { background: var(--accent); color: var(--bg); }
     .epilogue-link:focus-visible { outline: 2px solid var(--cyan); outline-offset: 3px; }
     .epilogue-credit { margin-top: 2rem; color: var(--muted); font-size: 0.9rem; }
+    .session-hero {
+      min-height: calc(100svh - 100px);
+      display: grid;
+      grid-template-columns: minmax(0, 1.6fr) minmax(220px, 0.7fr);
+      align-items: center;
+      gap: 2rem;
+      padding: 2rem 0 5rem;
+      background: radial-gradient(ellipse at 95% 20%, var(--accent-dim), transparent 60%);
+    }
+    .session-chips { display: flex; flex-wrap: wrap; gap: 0.6rem; margin-bottom: 1.5rem; }
+    .session-chip {
+      padding: 0.45rem 0.8rem;
+      border: 1px solid var(--border-strong);
+      border-radius: 99px;
+      color: var(--text-sub);
+      font-size: 0.8rem;
+      font-weight: 700;
+    }
+    .session-chip.primary { background: var(--accent); color: var(--bg); }
+    .session-hero h1 { font-size: clamp(2.2rem, 5.5vw, 4.3rem); line-height: 1.12; margin-bottom: 1rem; }
+    .session-subtitle { font-size: clamp(1.2rem, 2.5vw, 1.8rem); font-weight: 800; }
+    .session-summary { color: var(--text-sub); margin-top: 1.2rem; line-height: 1.9; }
+    .session-speaker { display: flex; align-items: center; gap: 0.9rem; margin: 1.8rem 0; }
+    .speaker-monogram {
+      display: grid;
+      place-items: center;
+      flex: 0 0 56px;
+      height: 56px;
+      border: 1px solid var(--accent);
+      border-radius: 50%;
+      background: var(--accent-dim);
+      color: var(--accent);
+      font-weight: 800;
+    }
+    .session-speaker strong { display: block; color: var(--accent); font-size: 1.15rem; }
+    .session-speaker p { color: var(--muted); font-size: 0.85rem; margin-top: 0.2rem; }
+    .session-hero .epilogue-actions { margin-top: 0; }
+    .session-shortcuts { color: var(--muted); font-size: 0.8rem; margin-top: 1rem; }
+    .session-preview {
+      padding: 1.3rem;
+      border: 1px solid var(--border-strong);
+      border-radius: 18px;
+      background: linear-gradient(145deg, var(--surface-2), var(--bg));
+      box-shadow: var(--shadow);
+    }
+    .session-preview .mono { color: var(--accent); font-size: 0.75rem; }
+    .preview-kpis { display: grid; grid-template-columns: 1fr 1fr; gap: 0.7rem; margin: 1.2rem 0; }
+    .preview-kpis div { padding: 0.9rem; border-radius: 8px; background: var(--accent-dim); font-size: 0.8rem; }
+    .preview-kpis b { display: block; color: var(--accent); margin-top: 0.4rem; font-size: 1.4rem; }
+    .preview-bars { display: flex; align-items: flex-end; gap: 0.65rem; height: 110px; border-bottom: 1px solid var(--border); }
+    .preview-bars span { flex: 1; background: linear-gradient(var(--accent), #927500); border-radius: 5px 5px 0 0; }
+    .session-preview figcaption { color: var(--muted); font-size: 0.8rem; margin-top: 1rem; }
+    @media (max-width: 900px) {
+      .session-hero { grid-template-columns: 1fr; }
+      .session-preview { display: none; }
+    }
     .copy-status { color: var(--cyan); font-size: 0.85rem; }
 
     a.ext-link {
@@ -799,12 +855,49 @@
   <main>
 
     <!-- SECTION 0: HERO / OVERTURE -->
-    <section id="sec-0" data-lv="1" data-title="수동 드래그앤드롭러" data-stage="Overture · 패러다임의 전환" data-agent="과거의 AI 연동과 2026년 6월 MS 공식 Authoring Agent Skills의 결정적 차이를 먼저 살펴봅시다." data-item="">
+    <section id="sec-0" data-lv="1" data-title="에이전틱 BI 첫걸음" data-stage="Session 05 · 허석 · 에이전틱 BI 간략 실습" data-agent="안녕하세요! 허석의 에이전틱 BI 간략 실습입니다. 익숙한 AI 도구를 골라 연결 확인부터 함께 시작해 보세요." data-item="">
+      <div class="session-hero">
+        <div>
+          <div class="session-chips">
+            <span class="session-chip primary">SESSION 05 · 15:00–15:30</span>
+            <span class="session-chip">Power BI · GitHub</span>
+            <span class="session-chip">발표 (데모) · 간략 실습</span>
+          </div>
+          <h1>데이터 분석가,<br>이제 안 뽑아도 되나요?<br><span>에이전틱 BI_</span></h1>
+          <p class="session-subtitle">처음부터 끝까지 말로 하는 에이전틱 BI</p>
+          <p class="session-summary">에이전트와 함께 Power BI 보고서를 만드는 간략 실습입니다. 한결전자(K-Retail)의 가상 데이터로 모델을 연결하고, 측정값을 설계·검증한 뒤 보고서 화면까지 만들어 봅니다. Claude Code·GitHub Copilot·Codex 중 익숙한 도구로 시작하세요.</p>
+          <div class="session-speaker">
+            <span class="speaker-monogram" aria-hidden="true">허석</span>
+            <div>
+              <strong>허석</strong>
+              <p>드림아이시스템 · 정보전략실 · 이사</p>
+              <p>Microsoft MVP · Business Applications · Power Automate, Copilot Studio</p>
+            </div>
+          </div>
+          <div class="epilogue-actions">
+            <a class="epilogue-link primary" href="#step-1">간략 실습 시작 ↓</a>
+            <a class="epilogue-link" href="#session-overview">먼저 개념 살펴보기</a>
+          </div>
+          <p class="session-shortcuts">← → 장 이동 · M 전체 지도 · 실습은 Windows의 Power BI Desktop 기준입니다.</p>
+        </div>
+        <figure class="session-preview">
+          <div class="mono">PBI_AGENT · 질문에서 보고서까지</div>
+          <div class="preview-kpis">
+            <div>매출의 기준<b>설계</b></div>
+            <div>숫자의 근거<b>검증</b></div>
+          </div>
+          <div class="preview-bars" aria-hidden="true">
+            <span style="height:35%"></span><span style="height:55%"></span><span style="height:45%"></span><span style="height:75%"></span><span style="height:90%"></span>
+          </div>
+          <figcaption>연결 → 설계 → 생성 → 검증 → 보고서<br>실습 흐름을 표현한 그림이며 실제 분석 결과가 아닙니다.</figcaption>
+        </figure>
+      </div>
+      <div id="session-overview" style="scroll-margin-top:80px;">
       <div class="sec-meta">
         <span class="chapter-badge">Overture · 한국어 실습 매뉴얼</span>
         <span class="loc-badge">실습 도메인: <b>한결전자 (K-Retail 가전·디지털 유통 데이터셋)</b></span>
       </div>
-      <h1>드래그 앤 드롭 없이 완성하는<br><span>Power BI 에이전트</span> 한국어 실습 매뉴얼<span>_</span></h1>
+      <h2>드래그 앤 드롭 없이 완성하는<br><em>Power BI 에이전트</em> 한국어 실습 매뉴얼</h2>
       <p>
         <a class="ext-link" href="../guide/">← 행사 안내</a>
         · <a class="ext-link" href="kit/K_Retail_PowerBI_Agent_실습패키지_통합본.zip" download>실습 패키지 ZIP 다운로드</a>
@@ -816,6 +909,7 @@
       <p class="lead">
         단 한 개의 시각적 개체(Visual)도 직접 마우스로 만들지 않고, 제공된 <b>한결전자(K-Retail) 5종 한글 CSV 데이터셋</b>과 <b>Claude Code·GitHub Copilot·Codex 등 도구 실행이 가능한 AI 에이전트</b>, Microsoft 공식 <b>Authoring Agent Skills</b>, <b>MCP 서버</b>, 그리고 <b>Desktop Bridge CLI</b>로 4페이지 분량의 한국어 경영진 대시보드를 설계·구축·시각 검증하는 실전 가이드입니다. 설치와 실행 시간은 환경에 따라 달라집니다.
       </p>
+      </div>
 
       <div class="grid-2">
         <div class="card">
