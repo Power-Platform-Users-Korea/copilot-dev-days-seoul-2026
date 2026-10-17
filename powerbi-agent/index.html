@@ -685,6 +685,28 @@
     }
     .measure-stage h5 { font-size: 1rem; color: var(--accent); margin-bottom: 0.6rem; }
     .measure-stage p + p { margin-top: 0.6rem; }
+    .epilogue-quote {
+      margin: 1.8rem 0;
+      padding: 1.5rem;
+      border-left: 4px solid var(--accent);
+      background: var(--accent-dim);
+      border-radius: 0 12px 12px 0;
+    }
+    .epilogue-quote p { font-size: clamp(1.2rem, 3vw, 1.8rem); font-weight: 800; }
+    .epilogue-quote footer { margin-top: 0.8rem; color: var(--text-sub); font-size: 0.9rem; }
+    .epilogue-actions { display: flex; flex-wrap: wrap; gap: 0.7rem; margin-top: 1.3rem; }
+    .epilogue-link {
+      display: inline-block;
+      padding: 0.75rem 1rem;
+      border: 1px solid var(--border-strong);
+      border-radius: 8px;
+      color: var(--accent);
+      text-decoration: none;
+      font-weight: 700;
+    }
+    .epilogue-link.primary { background: var(--accent); color: var(--bg); }
+    .epilogue-link:focus-visible { outline: 2px solid var(--cyan); outline-offset: 3px; }
+    .epilogue-credit { margin-top: 2rem; color: var(--muted); font-size: 0.9rem; }
     .copy-status { color: var(--cyan); font-size: 0.85rem; }
 
     a.ext-link {
@@ -786,6 +808,7 @@
       <p>
         <a class="ext-link" href="../guide/">← 행사 안내</a>
         · <a class="ext-link" href="kit/K_Retail_PowerBI_Agent_실습패키지_통합본.zip" download>실습 패키지 ZIP 다운로드</a>
+        · <a class="ext-link" href="#epilogue">에필로그 · 허석</a>
       </p>
       <p style="color:var(--muted); margin-top:0.6rem;">
         실습 패키지의 고객·매출 데이터는 교육용 가상 데이터입니다. ZIP에는 CSV 5종, 테마 JSON, 실습 가이드와 원본 HTML 매뉴얼이 포함되어 있습니다. 최신 매뉴얼은 이 웹페이지를 참고하세요.
@@ -1419,9 +1442,66 @@ Desktop에서 PBIP로 저장하는 방법을 안내해 줘. 내가 저장한 다
       <div class="item-reward">
         <div class="item-idx">06</div>
         <div>
-          <b>최종 학위 취득: 척척박사 Power BI 에이전트 아키텍트 (Lv.MAX)</b>
-          <span>이제 한결전자 실습 패키지와 이 인터랙티브 매뉴얼로 완벽한 에이전트 기반 BI 구축을 시연하실 수 있습니다.</span>
+          <b>참고 자료 정리 완료 · 이제 나의 실습으로</b>
+          <span>명령어와 공식 문서를 확인했다면, 에필로그에서 이번 실습의 핵심과 다음 한 걸음을 정리해 보세요.</span>
         </div>
+      </div>
+    </section>
+
+    <section id="epilogue" data-lv="8" data-title="에이전틱 BI 실습의 첫걸음" data-stage="Epilogue · 허석의 에이전틱 BI 간략 실습" data-agent="AI에게 만들게 하는 것만큼, 무엇을 만들지 정하고 결과를 확인하는 일이 중요합니다. 다음에는 여러분의 업무 질문 하나로 시작해 보세요." data-item="07. 나의 업무 질문으로 이어가는 실습 체크리스트">
+      <div class="sec-meta">
+        <span class="chapter-badge">Epilogue · 다음은 여러분의 데이터</span>
+        <span class="loc-badge">함께한 사람: <b>허석</b></span>
+      </div>
+      <h2>만드는 일은 에이전트와,<br><em>판단하는 일은 우리와.</em></h2>
+      <p class="lead">이 페이지는 허석의 「데이터 분석가, 이제 안 뽑아도 되나요? 처음부터 끝까지 말로 하는 에이전틱 BI」 세션을 따라 해 보는 간략 실습 자료입니다. 한결전자(K-Retail)의 가상 데이터로, 에이전트와 Power BI 보고서를 만들어 가는 흐름을 작게 경험해 봅니다.</p>
+
+      <blockquote class="epilogue-quote">
+        <p>“보고서를 만들어 줘”에서 끝내지 않고,<br>“이 숫자가 왜 맞는지 보여줘”까지.</p>
+        <footer>이번 실습에서 가져갈 한 가지</footer>
+      </blockquote>
+
+      <div class="grid-2">
+        <div class="card">
+          <span class="card-tag tag-yellow">오늘의 작은 실습</span>
+          <h4>우리가 따라온 흐름</h4>
+          <ol style="padding-left:1.3rem;">
+            <li><b>연결 확인:</b> 내가 선택한 파일과 Desktop 모델이 맞는지 확인하기</li>
+            <li><b>측정값 설계:</b> 매출·이익·성장률의 의미와 계산 기준 정하기</li>
+            <li><b>생성과 검증:</b> 승인한 수식을 만들고 실제 숫자를 검산·저장하기</li>
+            <li><b>보고서 구성:</b> 검증한 KPI로 화면을 만들고 테마와 결과 확인하기</li>
+          </ol>
+        </div>
+        <div class="card highlight">
+          <span class="card-tag tag-cyan">에이전트와 사람의 역할</span>
+          <h4>도구가 달라도, 확인할 것은 같습니다</h4>
+          <p>Claude Code, VS Code의 Copilot Chat, Codex, Copilot CLI 중 익숙한 도구로 시작하세요. 중요한 것은 도구 이름보다 업무 질문과 계산 기준입니다.</p>
+          <p style="margin-top:0.8rem;">에이전트는 수식과 보고서 작성을 돕습니다. 사람은 무엇을 볼지 정하고, 변경을 승인하고, 숫자와 화면이 업무에 맞는지 판단합니다. 짧은 실습을 마쳤다고 운영 환경 검증까지 끝난 것은 아닙니다.</p>
+        </div>
+      </div>
+
+      <div class="card" style="margin-top:1.5rem;">
+        <span class="card-tag tag-yellow">다음 한 걸음</span>
+        <h4>다음에는 업무 질문 하나만 가져오세요</h4>
+        <p>“어느 매장의 이익률이 낮아졌을까?”처럼 확인하고 싶은 질문 하나와 KPI 하나를 정해 보세요. 전체 자동화보다 작은 결과를 만들고 검증하는 것부터 시작하면 됩니다.</p>
+        <ul>
+          <li>먼저 가상 데이터로 연결·설계·검증 순서를 한 번 더 반복하기</li>
+          <li>실제 데이터를 쓰기 전 개인정보·회사 정책·AI 도구의 데이터 처리 조건 확인하기</li>
+          <li>원본을 보존한 별도 프로젝트에서 변경하고, 검증·승인 전에는 게시하지 않기</li>
+        </ul>
+        <div class="epilogue-actions">
+          <a class="epilogue-link primary" href="#step-1">간략 실습 다시 시작하기</a>
+          <a class="epilogue-link" href="kit/K_Retail_PowerBI_Agent_실습패키지_통합본.zip" download>실습 패키지 다운로드</a>
+          <a class="epilogue-link" href="#step-3">측정값 3단계 다시 보기</a>
+          <a class="epilogue-link" href="../guide/">행사 안내로 돌아가기</a>
+        </div>
+      </div>
+
+      <div class="epilogue-credit">
+        <b style="color:var(--text);">함께해 주셔서 감사합니다. · 허석</b><br>
+        드림아이시스템 · 정보전략실 · 이사<br>
+        GitHub Copilot Dev Days Seoul 2026 · 에이전틱 BI 세션 간략 실습<br>
+        한결전자(K-Retail) 고객·매출 데이터는 교육용 가상 데이터입니다.
       </div>
     </section>
 
@@ -1687,43 +1767,36 @@ ls
       }, 3200);
     }
 
-    function observeSections() {
-      const observer = new IntersectionObserver((entries) => {
-        entries.forEach(entry => {
-          if (entry.isIntersecting) {
-            const sec = entry.target;
-            const idx = sections.indexOf(sec);
-            currentIdx = idx;
-
-            const lv = sec.getAttribute('data-lv');
-            const title = sec.getAttribute('data-title');
-            const stage = sec.getAttribute('data-stage');
-            const speech = sec.getAttribute('data-agent');
-            const item = sec.getAttribute('data-item');
-
-            hdrLv.textContent = lv;
-            hdrTitle.textContent = title;
-            hdrStage.innerHTML = `현재 위치: <b>${stage}</b>`;
-            hdrExp.style.width = `${Math.round((lv / sections.length) * 100)}%`;
-            agentSpeech.textContent = speech;
-
-            dots.forEach((d, i) => d.classList.toggle('active', i === idx));
-
-            if (item && !seenItems.has(idx)) {
-              seenItems.add(idx);
-              showToast(item);
-            }
-          }
-        });
-      }, { threshold: 0, rootMargin: `-80px 0px -${Math.max(0, window.innerHeight - 160)}px 0px` });
-      sections.forEach(s => observer.observe(s));
-      return observer;
+    let activeSection = null;
+    function updateChapter() {
+      const sec = sections.filter(section => section.getBoundingClientRect().top <= 120).pop() || sections[0];
+      if (sec === activeSection) return;
+      activeSection = sec;
+      currentIdx = sections.indexOf(sec);
+      hdrLv.textContent = sec.dataset.lv;
+      hdrTitle.textContent = sec.dataset.title;
+      hdrStage.innerHTML = `현재 위치: <b>${sec.dataset.stage}</b>`;
+      hdrExp.style.width = `${Math.round(((currentIdx + 1) / sections.length) * 100)}%`;
+      agentSpeech.textContent = sec.dataset.agent;
+      dots.forEach((dot, idx) => dot.classList.toggle('active', idx === currentIdx));
+      if (sec.dataset.item && !seenItems.has(currentIdx)) {
+        seenItems.add(currentIdx);
+        showToast(sec.dataset.item);
+      }
     }
-    let observer = observeSections();
-    window.addEventListener('resize', () => {
-      observer.disconnect();
-      observer = observeSections();
-    });
+    let chapterUpdatePending = false;
+    function scheduleChapterUpdate() {
+      if (chapterUpdatePending) return;
+      chapterUpdatePending = true;
+      requestAnimationFrame(() => {
+        chapterUpdatePending = false;
+        updateChapter();
+      });
+    }
+    window.addEventListener('scroll', scheduleChapterUpdate, { passive: true });
+    window.addEventListener('resize', scheduleChapterUpdate);
+    window.addEventListener('load', scheduleChapterUpdate);
+    updateChapter();
 
     function moveSection(delta) {
       const next = Math.max(0, Math.min(sections.length - 1, currentIdx + delta));
