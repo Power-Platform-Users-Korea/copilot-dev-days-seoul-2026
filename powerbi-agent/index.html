@@ -176,9 +176,10 @@
     .agent-bar {
       position: fixed;
       bottom: 1rem;
-      left: 0;
+      right: 0;
       width: min(430px, calc(100vw - 12px));
       display: flex;
+      flex-direction: row-reverse;
       align-items: flex-end;
       gap: 0.6rem;
       z-index: 950;
@@ -198,7 +199,7 @@
       padding: 1rem;
       margin-bottom: 26px;
       border: 1px solid var(--border-strong);
-      border-radius: 18px 18px 18px 4px;
+      border-radius: 18px 18px 4px 18px;
       background: rgba(17, 23, 38, 0.97);
       box-shadow: var(--shadow);
       color: var(--text-sub);
@@ -210,14 +211,14 @@
     .agent-text::before {
       content: '';
       position: absolute;
-      left: -8px;
+      right: -8px;
       bottom: 18px;
       width: 14px;
       height: 14px;
       background: #111726;
-      border-left: 1px solid var(--border-strong);
+      border-right: 1px solid var(--border-strong);
       border-bottom: 1px solid var(--border-strong);
-      transform: rotate(45deg);
+      transform: rotate(-45deg);
     }
     .agent-message-layout { display: grid; }
     .agent-message-layout > span { grid-area: 1 / 1; }
