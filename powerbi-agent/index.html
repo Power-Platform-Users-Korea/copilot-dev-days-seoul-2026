@@ -175,34 +175,62 @@
     /* Floating Agent Dialogue Bar */
     .agent-bar {
       position: fixed;
-      bottom: 1.2rem;
-      left: 50%;
-      transform: translateX(-50%);
-      width: min(640px, 92vw);
-      background: rgba(17, 23, 38, 0.94);
-      backdrop-filter: blur(12px);
-      border: 1px solid var(--border-strong);
-      border-radius: 14px;
-      padding: 0.85rem 1.25rem;
+      bottom: 1rem;
+      left: 0;
+      width: min(430px, calc(100vw - 12px));
       display: flex;
-      align-items: center;
-      gap: 0.8rem;
+      align-items: flex-end;
+      gap: 0.6rem;
       z-index: 950;
-      box-shadow: var(--shadow);
+      pointer-events: none;
     }
     .agent-character {
       width: 104px;
       height: 104px;
       flex: 0 0 104px;
       object-fit: contain;
-      margin-top: -42px;
       filter: drop-shadow(0 5px 8px rgba(0, 0, 0, 0.3));
     }
     .agent-text {
+      position: relative;
+      display: block;
+      flex: 1;
+      padding: 1rem;
+      margin-bottom: 26px;
+      border: 1px solid var(--border-strong);
+      border-radius: 18px 18px 18px 4px;
+      background: rgba(17, 23, 38, 0.97);
+      box-shadow: var(--shadow);
       color: var(--text-sub);
       min-width: 0;
       font-size: 0.92rem;
+      line-height: 1.85;
       overflow-wrap: anywhere;
+    }
+    .agent-text::before {
+      content: '';
+      position: absolute;
+      left: -8px;
+      bottom: 18px;
+      width: 14px;
+      height: 14px;
+      background: #111726;
+      border-left: 1px solid var(--border-strong);
+      border-bottom: 1px solid var(--border-strong);
+      transform: rotate(45deg);
+    }
+    .agent-message-layout { display: grid; }
+    .agent-message-layout > span { grid-area: 1 / 1; }
+    .agent-message-space { visibility: hidden; }
+    .screen-reader-only {
+      position: absolute;
+      width: 1px;
+      height: 1px;
+      padding: 0;
+      margin: -1px;
+      overflow: hidden;
+      clip-path: inset(50%);
+      white-space: nowrap;
     }
     .hud-btn {
       background: var(--surface-2);
@@ -770,9 +798,9 @@
       .lv-name { display: none; }
       .side-nav { display: none; }
       .step-item { grid-template-columns: 1fr; }
-      .agent-bar { padding: 0.7rem 0.8rem; gap: 0.6rem; }
-      .agent-character { width: 76px; height: 76px; flex-basis: 76px; margin-top: -25px; }
-      .agent-text { font-size: 0.82rem; }
+      .agent-bar { width: min(340px, calc(100vw - 12px)); gap: 0.45rem; }
+      .agent-character { width: 76px; height: 76px; flex-basis: 76px; }
+      .agent-text { font-size: 0.82rem; padding: 0.8rem; margin-bottom: 18px; }
     }
     @media (max-width: 480px) {
       .brand { font-size: 0.88rem; }
@@ -824,7 +852,13 @@
   <!-- Bottom Floating Agent Bar -->
   <div class="agent-bar">
     <img class="agent-character" id="agent-character" src="images/agent/agent-01.png" width="104" height="104" alt="" aria-hidden="true">
-    <span class="agent-text" id="agent-speech" role="status" aria-live="polite">안녕하세요! 한결전자(K-Retail) 한글 실습 데이터셋으로 Power BI 완전 자동화 여정을 시작해 보세요.</span>
+    <div class="agent-text">
+      <span class="agent-message-layout" aria-hidden="true">
+        <span class="agent-message-space" id="agent-message-space">안녕하세요! 한결전자(K-Retail) 한글 실습 데이터셋으로 Power BI 완전 자동화 여정을 시작해 보세요.</span>
+        <span id="agent-speech">안녕하세요! 한결전자(K-Retail) 한글 실습 데이터셋으로 Power BI 완전 자동화 여정을 시작해 보세요.</span>
+      </span>
+      <span class="screen-reader-only" id="agent-announcement" role="status" aria-live="polite"></span>
+    </div>
   </div>
 
   <main>
@@ -1792,6 +1826,36 @@ ls
     const hdrTitle = document.getElementById('hdr-title');
     const hdrStage = document.getElementById('hdr-stage');
     const agentSpeech = document.getElementById('agent-speech');
+    const agentMessageSpace = document.getElementById('agent-message-space');
+    const agentAnnouncement = document.getElementById('agent-announcement');
+    const reducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)');
+    let speechTimer = null;
+    let speechMessage = '';
+    function showAgentMessage(message) {
+      clearTimeout(speechTimer);
+      speechMessage = message;
+      agentMessageSpace.textContent = message;
+      agentAnnouncement.textContent = message;
+      if (reducedMotion.matches) {
+        agentSpeech.textContent = message;
+        return;
+      }
+      const characters = Array.from(message);
+      let count = 0;
+      agentSpeech.textContent = '';
+      function typeNextCharacter() {
+        count++;
+        agentSpeech.textContent = characters.slice(0, count).join('');
+        if (count < characters.length) speechTimer = setTimeout(typeNextCharacter, 26);
+      }
+      typeNextCharacter();
+    }
+    reducedMotion.addEventListener('change', () => {
+      if (reducedMotion.matches) {
+        clearTimeout(speechTimer);
+        agentSpeech.textContent = speechMessage;
+      }
+    });
     const agentCharacter = document.getElementById('agent-character');
     let characterIndex = -1;
     function changeCharacter() {
@@ -1855,7 +1919,7 @@ ls
       hdrTitle.textContent = sec.dataset.title;
       hdrStage.innerHTML = `현재 위치: <b>${sec.dataset.stage}</b>`;
       hdrExp.style.width = `${Math.round(((currentIdx + 1) / sections.length) * 100)}%`;
-      agentSpeech.textContent = sec.dataset.agent;
+      showAgentMessage(sec.dataset.agent);
       changeCharacter();
       dots.forEach((dot, idx) => dot.classList.toggle('active', idx === currentIdx));
       if (sec.dataset.item && !seenItems.has(currentIdx)) {
