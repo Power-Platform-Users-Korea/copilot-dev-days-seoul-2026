@@ -25,6 +25,14 @@
 
 ## 프로그램
 
+### LLM Wiki in English
+
+- [English interactive lecture](llm-wiki/en/) and [English starter kit guide](llm-wiki/en/kit/README.md).
+- Use the **한국어 / English** links in the lecture header to switch languages at the current chapter. Both versions work as static GitHub Pages sites, without a build step.
+- The English kit includes translated PowerShell scripts, generated wiki content, prompts, and a ZIP download. Original tenant screenshots remain in Korean, with English explanations. The external template repository, event guide, and follow-up course may be in Korean.
+- When updating the lecture or kit, update both language versions. Keep chapter IDs aligned and regenerate each kit ZIP after changing its scripts or guide. Images and the bilingual license are shared.
+- Validate language links, local resources, script syntax, and chapter parity with `node --test llm-wiki\tests\language.test.cjs` (Node.js 18 or later; no packages required).
+
 ### Power BI 에이전트 실습 자료
 
 - [한국어 인터랙티브 매뉴얼](powerbi-agent/): 설명은 짧게 줄이고, 흐름·스택·스타 스키마·도구 허브·자가 검수 루프·토큰 도넛 차트 같은 애니메이션 도식으로 내용을 보여 줍니다. 그림은 화면에 들어올 때 움직이며, 동작 줄이기 설정에서는 완성된 상태로 바로 표시됩니다. 이후 수정은 `powerbi-agent/index.html`에 반영합니다.
