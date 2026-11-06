@@ -692,6 +692,7 @@
       outline-offset: 3px;
     }
     .tool-guide { color: var(--text-sub); font-size: 0.92rem; overflow-wrap: anywhere; }
+    .environment-install { margin-bottom: 1.2rem; padding-bottom: 1rem; border-bottom: 1px solid var(--border); }
     .tool-guide .copy-btn { flex-shrink: 0; white-space: nowrap; }
     .tool-guide ol { padding-left: 1.4rem; margin: 0.6rem 0; }
     .tool-guide li + li { margin-top: 0.45rem; }
@@ -1648,8 +1649,30 @@
         <div class="step-item" id="step-1">
           <div class="step-num">STEP 01</div>
           <div class="tool-guide">
-            <h4>도구 설치 준비</h4>
-            <p class="step-goal">스킬, 로컬 MCP, 보고서 CLI를 준비합니다. 모델과 보고서는 아직 건드리지 않습니다.</p>
+            <div class="environment-install">
+              <h4>먼저 직접 설치 · LLM 사용 전</h4>
+              <p class="step-goal">아래 기본 프로그램은 에이전트에게 설치시키지 말고, 공식 사이트에서 직접 내려받아 Windows에 설치하세요. 설치 후 PowerShell을 새로 열어 버전을 확인합니다.</p>
+              <ol>
+                <li><a class="ext-link" href="https://www.python.org/downloads/windows/" target="_blank" rel="noopener">Python for Windows</a> — VS Code 또는 Codex를 사용할 때 스킬 설치 도구 준비에 필요합니다.</li>
+                <li><a class="ext-link" href="https://nodejs.org/en/download" target="_blank" rel="noopener">Node.js LTS</a> — npm과 로컬 Power BI Authoring MCP 실행에 필요합니다.</li>
+                <li><a class="ext-link" href="https://git-scm.com/install/windows" target="_blank" rel="noopener">Git for Windows</a>를 설치합니다.</li>
+                <li><a class="ext-link" href="https://www.microsoft.com/ko-kr/power-platform/products/power-bi/desktop" target="_blank" rel="noopener">Power BI Desktop</a>을 설치하고 실습 중 계속 실행해 둡니다.</li>
+                <li>VS Code를 사용할 경우 <a class="ext-link" href="https://code.visualstudio.com/" target="_blank" rel="noopener">Visual Studio Code</a>도 설치합니다. 다른 도구를 쓴다면 건너뛰어도 됩니다.</li>
+              </ol>
+              <div class="code-block">
+                <div class="code-header">
+                  <span>Windows PowerShell · 기본 프로그램 설치 확인</span>
+                  <button type="button" class="copy-btn" onclick="copyCode(this)">복사</button>
+                </div>
+                <pre>py --version
+node --version
+npm --version
+git --version</pre>
+              </div>
+              <p class="step-hint">이어서 아래에서 사용할 AI 도구를 고른 뒤, 플러그인·스킬·MCP·CLI 설정은 해당 LLM의 대화창이나 전용 플러그인 명령으로 진행합니다. npm 패키지나 APM을 여기서 따로 설치할 필요는 없습니다. 명령을 찾을 수 없으면 설치 프로그램의 PATH 옵션을 확인하고 PowerShell을 다시 여세요.</p>
+            </div>
+            <h4>그다음 LLM에서 에이전트 도구 설정</h4>
+            <p class="step-goal">아래에서 사용할 AI 도구를 선택해 스킬, 로컬 MCP, 보고서 CLI를 준비합니다. 명령과 설정 변경 내용을 확인한 뒤 승인하고, 모델과 보고서는 아직 수정하지 않습니다.</p>
             <div class="tool-picker" role="group" aria-label="STEP 1 사용할 도구" hidden>
               <button type="button" class="tool-btn" data-tool="claude" aria-pressed="true" aria-controls="setup-guide">Claude Code</button>
               <button type="button" class="tool-btn" data-tool="vscode" aria-pressed="false" aria-controls="setup-guide">VS Code</button>
