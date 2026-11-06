@@ -1650,15 +1650,23 @@
           <div class="step-num">STEP 01</div>
           <div class="tool-guide">
             <div class="environment-install">
-              <h4>먼저 직접 설치 · LLM 사용 전</h4>
-              <p class="step-goal">아래 기본 프로그램은 에이전트에게 설치시키지 말고, 공식 사이트에서 직접 내려받아 Windows에 설치하세요. 설치 후 PowerShell을 새로 열어 버전을 확인합니다.</p>
+              <h4>LLM 사용 전 직접 설치</h4>
+              <p class="step-goal">아래 기본 프로그램은 에이전트에 설치를 맡기지 말고, 공식 사이트에서 내려받아 Windows에 직접 설치하세요. 설치를 마치면 PowerShell을 새로 열고 버전을 확인하세요.</p>
               <ol>
-                <li><a class="ext-link" href="https://www.python.org/downloads/windows/" target="_blank" rel="noopener">Python for Windows</a> — VS Code 또는 Codex를 사용할 때 스킬 설치 도구 준비에 필요합니다.</li>
-                <li><a class="ext-link" href="https://nodejs.org/en/download" target="_blank" rel="noopener">Node.js LTS</a> — npm과 로컬 Power BI Authoring MCP 실행에 필요합니다.</li>
-                <li><a class="ext-link" href="https://git-scm.com/install/windows" target="_blank" rel="noopener">Git for Windows</a>를 설치합니다.</li>
-                <li><a class="ext-link" href="https://www.microsoft.com/ko-kr/power-platform/products/power-bi/desktop" target="_blank" rel="noopener">Power BI Desktop</a>을 설치하고 실습 중 계속 실행해 둡니다.</li>
-                <li>VS Code를 사용할 경우 <a class="ext-link" href="https://code.visualstudio.com/" target="_blank" rel="noopener">Visual Studio Code</a>도 설치합니다. 다른 도구를 쓴다면 건너뛰어도 됩니다.</li>
+                <li><a class="ext-link" href="https://www.python.org/downloads/windows/" target="_blank" rel="noopener">Python for Windows</a> — VS Code나 Codex에서 스킬 설치 도구를 사용하려면 필요합니다.</li>
+                <li><a class="ext-link" href="https://nodejs.org/en/download" target="_blank" rel="noopener">Node.js LTS</a> — npm과 로컬 Power BI Authoring MCP를 실행하려면 필요합니다.</li>
+                <li><a class="ext-link" href="https://git-scm.com/install/windows" target="_blank" rel="noopener">Git for Windows</a>를 설치하세요.</li>
+                <li><a class="ext-link" href="https://www.microsoft.com/ko-kr/power-platform/products/power-bi/desktop" target="_blank" rel="noopener">Power BI Desktop</a>을 설치하고 실습하는 동안 계속 실행해 두세요.</li>
+                <li>VS Code를 사용한다면 <a class="ext-link" href="https://code.visualstudio.com/" target="_blank" rel="noopener">Visual Studio Code</a>도 설치하세요. 다른 도구를 사용한다면 설치하지 않아도 됩니다.</li>
               </ol>
+              <p><strong>VS Code 사용 시 확장 설치</strong></p>
+              <p>VS Code에서 <kbd>Ctrl</kbd>+<kbd>Shift</kbd>+<kbd>X</kbd>를 눌러 확장 마켓플레이스를 여세요. 아래 목록에서 사용할 에이전트 하나를 찾아, 게시자가 목록과 일치하는지 확인한 뒤 설치하고 로그인하세요.</p>
+              <ul>
+                <li>GitHub Copilot Chat: <a class="ext-link" href="https://marketplace.visualstudio.com/items?itemName=GitHub.copilot-chat" target="_blank" rel="noopener">GitHub Copilot</a> — 게시자 GitHub</li>
+                <li>Codex: <a class="ext-link" href="https://marketplace.visualstudio.com/items?itemName=OpenAI.chatgpt" target="_blank" rel="noopener">Codex – OpenAI’s coding agent</a> — 게시자 OpenAI</li>
+                <li>Claude Code: <a class="ext-link" href="https://marketplace.visualstudio.com/items?itemName=Anthropic.claude-code" target="_blank" rel="noopener">Claude Code for VS Code</a> — 게시자 Anthropic</li>
+              </ul>
+              <p class="step-hint">확장은 VS Code 마켓플레이스에서 하나만 설치하면 됩니다. GitHub Copilot CLI나 Claude Code 터미널을 사용한다면 해당 확장은 설치하지 않아도 됩니다.</p>
               <div class="code-block">
                 <div class="code-header">
                   <span>Windows PowerShell · 기본 프로그램 설치 확인</span>
@@ -1669,10 +1677,10 @@ node --version
 npm --version
 git --version</pre>
               </div>
-              <p class="step-hint">이어서 아래에서 사용할 AI 도구를 고른 뒤, 플러그인·스킬·MCP·CLI 설정은 해당 LLM의 대화창이나 전용 플러그인 명령으로 진행합니다. npm 패키지나 APM을 여기서 따로 설치할 필요는 없습니다. 명령을 찾을 수 없으면 설치 프로그램의 PATH 옵션을 확인하고 PowerShell을 다시 여세요.</p>
+              <p class="step-hint">이어서 아래에서 사용할 AI 도구를 고르세요. VS Code 확장 외의 플러그인·스킬·MCP는 선택한 도구의 대화창이나 전용 플러그인 명령으로 설정합니다. npm 패키지나 APM을 여기서 따로 설치하지 마세요. 명령을 찾을 수 없으면 설치 프로그램의 PATH 설정을 확인한 뒤 PowerShell을 새로 여세요.</p>
             </div>
             <h4>그다음 LLM에서 에이전트 도구 설정</h4>
-            <p class="step-goal">아래에서 사용할 AI 도구를 선택해 스킬, 로컬 MCP, 보고서 CLI를 준비합니다. 명령과 설정 변경 내용을 확인한 뒤 승인하고, 모델과 보고서는 아직 수정하지 않습니다.</p>
+            <p class="step-goal">사용할 AI 도구를 선택하고 스킬, 로컬 MCP, 보고서 CLI를 준비하세요. 명령과 설정 변경 내용을 확인한 뒤 승인하세요. 이 단계에서는 모델과 보고서를 수정하지 않습니다.</p>
             <div class="tool-picker" role="group" aria-label="STEP 1 사용할 도구" hidden>
               <button type="button" class="tool-btn" data-tool="claude" aria-pressed="true" aria-controls="setup-guide">Claude Code</button>
               <button type="button" class="tool-btn" data-tool="vscode" aria-pressed="false" aria-controls="setup-guide">VS Code</button>
@@ -2135,7 +2143,7 @@ apm install microsoft/skills-for-fabric --skill powerbi-report-cli --skill seman
         name: 'Claude Code',
         setupLocation: '입력 위치: Claude Code 대화창 (터미널의 claude 또는 VS Code 확장 패널)',
         setupSteps: [
-          '터미널에서 claude를 실행하거나, VS Code 확장(Anthropic Claude Code)을 설치해 패널을 엽니다.',
+          '터미널에서 claude를 실행하거나, 앞서 VS Code 마켓플레이스에서 설치한 Claude Code 확장을 엽니다.',
           '로그인 후 아래 설치 요청을 붙여 넣습니다. 웹 채팅은 로컬 파일을 다루지 못합니다.',
           '플러그인 명령을 직접 넣을 때는 대화창에 한 줄씩 입력합니다.'
         ],
@@ -2157,7 +2165,7 @@ apm install microsoft/skills-for-fabric --skill powerbi-report-cli --skill seman
         name: 'VS Code · GitHub Copilot Chat',
         setupLocation: '입력 위치: VS Code Chat (상단 Chat 버튼 또는 보기 > 채팅)',
         setupSteps: [
-          '확장에서 GitHub Copilot을 설치하고 GitHub 계정으로 로그인합니다.',
+          '앞서 VS Code 마켓플레이스에서 설치한 GitHub Copilot 확장을 열고 GitHub 계정으로 로그인합니다.',
           'Chat에서 도구를 실행할 수 있는 Agent 모드를 고릅니다.',
           '아래 설치 요청을 붙여 넣습니다. /plugin 명령은 VS Code 터미널용이 아닙니다.'
         ],
@@ -2175,7 +2183,7 @@ apm install microsoft/skills-for-fabric --skill powerbi-report-cli --skill seman
         name: 'Codex · VS Code 확장',
         setupLocation: '입력 위치: VS Code의 Codex 확장 패널 (OpenAI Codex 기준)',
         setupSteps: [
-          '확장에서 OpenAI Codex를 설치하고 로그인합니다.',
+          '앞서 VS Code 마켓플레이스에서 설치한 OpenAI Codex 확장을 열고 로그인합니다.',
           '활동 표시줄의 Codex 아이콘으로 패널을 열고, 파일 편집과 명령 실행이 가능한 권한을 고릅니다.',
           '아래 설치 요청을 붙여 넣습니다. Copilot·Claude 전용 플러그인 명령은 쓰지 않습니다.'
         ],
